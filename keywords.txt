@@ -10,3 +10,8 @@ SetMode	KEYWORD2
 OnSetup	KEYWORD2
 OnLoop	KEYWORD2
 OnEnd	KEYWORD2
+OnModeChange	KEYWORD2
+OnSpeedChange	KEYWORD2
+OnSteeringChange	KEYWORD2
+OnOffsetLeftChange	KEYWORD2
+OnOffsetRightChange	KEYWORD2
