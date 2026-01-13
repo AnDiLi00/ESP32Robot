@@ -28,12 +28,12 @@ Esp32Robot Esp32Robot;
 
 void RemoteXY_offset_left_event() {
   Esp32Robot.OnOffsetLeftChange(RemoteXY.offset_left);
-  value_left = offset_left;
+  RemoteXY.value_left = RemoteXY.offset_left;
 }
 
 void RemoteXY_offset_right_event() {
   Esp32Robot.OnOffsetRightChange(RemoteXY.offset_right);
-  value_right = offset_right;
+  RemoteXY.value_right = RemoteXY.offset_right;
 }
 
 void setup() {
