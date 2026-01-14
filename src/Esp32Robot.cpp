@@ -4,11 +4,13 @@ const int8_t Esp32Robot::PIN_NOPIN = -1;
 const int8_t Esp32Robot::OFFSET_DEFAULT = 0;
 
 const int8_t Esp32Robot::DRIVE_DRIVE_DEFAULT = 90;
-const int8_t Esp32Robot::DRIVE_ANKLE_DEFAULT = 45;
+const int8_t Esp32Robot::DRIVE_ANKLE_LEFT_DEFAULT = 45;
+const int8_t Esp32Robot::DRIVE_ANKLE_RIGHT_DEFAULT = 125;
 const int8_t Esp32Robot::DRIVE_ARM_DEFAULT = 45;
 
 const int8_t Esp32Robot::WALK_DRIVE_DEFAULT = 90;
-const int8_t Esp32Robot::WALK_ANKLE_DEFAULT = 125;
+const int8_t Esp32Robot::WALK_ANKLE_LEFT_DEFAULT = 125;
+const int8_t Esp32Robot::WALK_ANKLE_RIGHT_DEFAULT = 45;
 const int8_t Esp32Robot::WALK_ARM_DEFAULT = 45;
 
 Esp32Robot::Esp32Robot(void) :
@@ -72,7 +74,7 @@ void Esp32Robot::SetOffset(const BodyParts &part, const int8_t &offset) {
 }
 
 void Esp32Robot::Move(const BodyParts &part, const int8_t &position) {
-  data.servos[part].write(position);
+  data.servos[part].write(position + GetOffset(part));
 }
 
 Esp32Robot::MovementMode Esp32Robot::GetMode(void) const {
@@ -85,8 +87,16 @@ void Esp32Robot::SetMode(const MovementMode &mode) {
 
     switch (data.mode) {
       case MOVE_DRIVE:
+        Move(PART_LEFT_DRIVE, DRIVE_DRIVE_DEFAULT);
+        Move(PART_RIGHT_DRIVE, DRIVE_DRIVE_DEFAULT);
+        Move(PART_LEFT_ANKLE, DRIVE_ANKLE_LEFT_DEFAULT);
+        Move(PART_RIGHT_ANKLE, DRIVE_ANKLE_RIGHT_DEFAULT);
         break;
       case MOVE_WALK:
+        Move(PART_LEFT_DRIVE, WALK_DRIVE_DEFAULT);
+        Move(PART_RIGHT_DRIVE, WALK_DRIVE_DEFAULT);
+        Move(PART_LEFT_ANKLE, WALK_ANKLE_LEFT_DEFAULT);
+        Move(PART_RIGHT_ANKLE, WALK_ANKLE_RIGHT_DEFAULT);
         break;
     }
   }

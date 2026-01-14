@@ -13,11 +13,13 @@ public:
   static const int8_t OFFSET_DEFAULT;
 
   static const int8_t DRIVE_DRIVE_DEFAULT;
-  static const int8_t DRIVE_ANKLE_DEFAULT;
+  static const int8_t DRIVE_ANKLE_LEFT_DEFAULT;
+  static const int8_t DRIVE_ANKLE_RIGHT_DEFAULT;
   static const int8_t DRIVE_ARM_DEFAULT;
 
   static const int8_t WALK_DRIVE_DEFAULT;
-  static const int8_t WALK_ANKLE_DEFAULT;
+  static const int8_t WALK_ANKLE_LEFT_DEFAULT;
+  static const int8_t WALK_ANKLE_RIGHT_DEFAULT;
   static const int8_t WALK_ARM_DEFAULT;
 
   enum MovementMode {
