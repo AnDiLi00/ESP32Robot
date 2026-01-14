@@ -175,7 +175,7 @@ void Esp32Robot::OnOffsetLeftChange(const int8_t &left_offset) {
   Serial.println(left_offset);
 
   SetOffset(PART_LEFT_ANKLE, data.mode, left_offset);
-  Update(PART_LEFT_ANKLE, data.position[PART_LEFT_ANKLE]);
+  Update(PART_LEFT_ANKLE);
 }
 
 void Esp32Robot::OnOffsetRightChange(const int8_t &right_offset) {
