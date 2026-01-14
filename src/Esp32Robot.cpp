@@ -24,7 +24,7 @@ Esp32Robot::Esp32Robot(const Esp32Robot &copy) :
   for (int8_t i = 0; i < PART_PARTS; i++) {
     data.pins[i] = copy.data.pins[i];
     data.offsets_drive[i] = copy.data.offsets_drive[i];
-    data.offsets_walk[i] = other.data.offsets_walk[i];
+    data.offsets_walk[i] = copy.data.offsets_walk[i];
     data.position[i] = copy.data.position[i];
 
     data.servos[i].detach();
