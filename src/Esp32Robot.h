@@ -11,6 +11,7 @@ class Esp32Robot {
 public:
   static const int8_t PIN_NOPIN;
   static const int8_t OFFSET_DEFAULT;
+  static const int8_t POSITION_DEFAULT;
 
   static const int8_t DRIVE_DRIVE_DEFAULT;
   static const int8_t DRIVE_ANKLE_LEFT_DEFAULT;
@@ -49,6 +50,7 @@ public:
   virtual void SetPin(const BodyParts &part, const int8_t &pin);
   virtual void SetOffset(const BodyParts &part, const MovementMode &mode, const int8_t &offset);
 
+  virtual void Update(const BodyParts &part);
   virtual void Move(const BodyParts &part, const int8_t &position);
 
   virtual MovementMode GetMode(void) const;
@@ -69,6 +71,7 @@ protected:
     int8_t pins[PART_PARTS];
     int8_t offsets_drive[PART_PARTS];
     int8_t offsets_walk[PART_PARTS];
+    int8_t position[PART_PARTS];
     Servo servos[PART_PARTS];
 
     MovementMode mode;
@@ -80,6 +83,7 @@ protected:
         pins[i] = PIN_NOPIN;
         offsets_drive[i] = OFFSET_DEFAULT;
         offsets_walk[i] = OFFSET_DEFAULT;
+        position[i] = POSITION_DEFAULT;
       }
     }
   };

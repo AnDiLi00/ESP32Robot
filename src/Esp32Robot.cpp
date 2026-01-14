@@ -2,6 +2,7 @@
 
 const int8_t Esp32Robot::PIN_NOPIN = -1;
 const int8_t Esp32Robot::OFFSET_DEFAULT = 0;
+const int8_t Esp32Robot::POSITION_DEFAULT = 0;
 
 const int8_t Esp32Robot::DRIVE_DRIVE_DEFAULT = 90;
 const int8_t Esp32Robot::DRIVE_ANKLE_LEFT_DEFAULT = 125;
@@ -22,13 +23,17 @@ Esp32Robot::Esp32Robot(const Esp32Robot &copy) :
 
   for (int8_t i = 0; i < PART_PARTS; i++) {
     data.pins[i] = copy.data.pins[i];
-    data.offsets[i] = copy.data.offsets[i];
+    data.offsets_drive[i] = copy.data.offsets_drive[i];
+    data.offsets_walk[i] = other.data.offsets_walk[i];
+    data.position[i] = copy.data.position[i];
 
     data.servos[i].detach();
     if (data.pins[i] != PIN_NOPIN) {
       data.servos[i].attach(data.pins[i]);
     }
   }
+
+  data.mode = copy.data.mode;
 }
 
 Esp32Robot::~Esp32Robot(void) {
@@ -38,13 +43,17 @@ Esp32Robot &Esp32Robot::operator=(const Esp32Robot &other) {
   if (&other != this) {
     for (int8_t i = 0; i < PART_PARTS; i++) {
       data.pins[i] = other.data.pins[i];
-      data.offsets[i] = other.data.offsets[i];
+      data.offsets_drive[i] = other.data.offsets_drive[i];
+      data.offsets_walk[i] = other.data.offsets_walk[i];
+      data.position[i] = other.data.position[i];
 
       data.servos[i].detach();
       if (data.pins[i] != PIN_NOPIN) {
         data.servos[i].attach(data.pins[i]);
       }
     }
+
+    data.mode = other.data.mode;
   }
 
   return (*this);
@@ -159,9 +168,15 @@ void Esp32Robot::OnSteeringChange(const int8_t &steering) {
 void Esp32Robot::OnOffsetLeftChange(const int8_t &left_offset) {
   Serial.print("OnOffsetLeftChange::offset=");
   Serial.println(left_offset);
+
+  SetOffset(PART_LEFT_ANKLE, data.mode, left_offset);
+  Move(PART_LEFT_ANKLE, data.position[PART_LEFT_ANKLE]);
 }
 
 void Esp32Robot::OnOffsetRightChange(const int8_t &right_offset) {
   Serial.print("OnOffsetRightChange::offset=");
   Serial.println(right_offset);
+
+  SetOffset(PART_RIGHT_ANKLE, data.mode, right_offset);
+  Move(PART_RIGHT_ANKLE, data.position[PART_RIGHT_ANKLE]);
 }
