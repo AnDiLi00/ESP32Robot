@@ -25,7 +25,7 @@ Esp32Robot::Esp32Robot(const Esp32Robot &copy) :
     data.pins[i] = copy.data.pins[i];
     data.offsets_drive[i] = copy.data.offsets_drive[i];
     data.offsets_walk[i] = copy.data.offsets_walk[i];
-    data.position[i] = copy.data.position[i];
+    data.positions[i] = copy.data.positions[i];
 
     data.servos[i].detach();
     if (data.pins[i] != PIN_NOPIN) {
@@ -45,7 +45,7 @@ Esp32Robot &Esp32Robot::operator=(const Esp32Robot &other) {
       data.pins[i] = other.data.pins[i];
       data.offsets_drive[i] = other.data.offsets_drive[i];
       data.offsets_walk[i] = other.data.offsets_walk[i];
-      data.position[i] = other.data.position[i];
+      data.positions[i] = other.data.positions[i];
 
       data.servos[i].detach();
       if (data.pins[i] != PIN_NOPIN) {
@@ -104,7 +104,12 @@ void Esp32Robot::SetOffset(const BodyParts &part, const MovementMode &mode, cons
   }
 }
 
+void Esp32Robot::Update(const BodyParts &part) {
+  Move(part, data.positions[part]);
+}
+
 void Esp32Robot::Move(const BodyParts &part, const int8_t &position) {
+  data.positions[part] = position;
   data.servos[part].write(position + GetOffset(part, data.mode));
 }
 
@@ -170,7 +175,7 @@ void Esp32Robot::OnOffsetLeftChange(const int8_t &left_offset) {
   Serial.println(left_offset);
 
   SetOffset(PART_LEFT_ANKLE, data.mode, left_offset);
-  Move(PART_LEFT_ANKLE, data.position[PART_LEFT_ANKLE]);
+  Update(PART_LEFT_ANKLE, data.position[PART_LEFT_ANKLE]);
 }
 
 void Esp32Robot::OnOffsetRightChange(const int8_t &right_offset) {
@@ -178,5 +183,5 @@ void Esp32Robot::OnOffsetRightChange(const int8_t &right_offset) {
   Serial.println(right_offset);
 
   SetOffset(PART_RIGHT_ANKLE, data.mode, right_offset);
-  Move(PART_RIGHT_ANKLE, data.position[PART_RIGHT_ANKLE]);
+  Update(PART_RIGHT_ANKLE);
 }
