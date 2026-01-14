@@ -23,6 +23,7 @@ public:
   static const int8_t WALK_ARM_DEFAULT;
 
   enum MovementMode {
+    MOVE_UNDEFINED,
     MOVE_DRIVE,
     MOVE_WALK
   };
@@ -43,10 +44,10 @@ public:
   Esp32Robot &operator=(const Esp32Robot &other);
 
   virtual int8_t GetPin(const BodyParts &part) const;
-  virtual int8_t GetOffset(const BodyParts &part) const;
+  virtual int8_t GetOffset(const BodyParts &part, const MovementMode &mode) const;
 
   virtual void SetPin(const BodyParts &part, const int8_t &pin);
-  virtual void SetOffset(const BodyParts &part, const int8_t &offset);
+  virtual void SetOffset(const BodyParts &part, const MovementMode &mode, const int8_t &offset);
 
   virtual void Move(const BodyParts &part, const int8_t &position);
 
@@ -66,17 +67,19 @@ public:
 protected:
   struct Data {
     int8_t pins[PART_PARTS];
-    int8_t offsets[PART_PARTS];
+    int8_t offsets_drive[PART_PARTS];
+    int8_t offsets_walk[PART_PARTS];
     Servo servos[PART_PARTS];
 
     MovementMode mode;
 
     Data(void) :
-      mode(MOVE_DRIVE) {
+      mode(MOVE_UNDEFINED) {
 
       for (uint8_t i = 0; i < PART_PARTS; i++) {
         pins[i] = PIN_NOPIN;
-        offsets[i] = OFFSET_DEFAULT;
+        offsets_drive[i] = OFFSET_DEFAULT;
+        offsets_walk[i] = OFFSET_DEFAULT;
       }
     }
   };

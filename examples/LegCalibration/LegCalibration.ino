@@ -55,5 +55,9 @@ void setup() {
 void loop() {
   RemoteXYEngine.handler();
 
+  RemoteXYEngine.delay(10000);
+  Esp32Robot.SetMode(Esp32Robot::MOVE_DRIVE);
+  RemoteXYEngine.delay(10000);
+  Esp32Robot.SetMode(Esp32Robot::MOVE_WALK);
   Esp32Robot.OnLoop();
 }
