@@ -1,8 +1,6 @@
 #ifndef __esp32roboteyes_h__
 #define __esp32roboteyes_h__
 
-#include <stdint.h>
-
 #include <Adafruit_SSD1306.h>
 
 class Esp32RobotEyes {
