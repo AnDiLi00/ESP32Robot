@@ -12,8 +12,8 @@ const uint8_t Esp32RobotEyes::EYE_BORDER = 10;
 const uint16_t Esp32RobotEyes::COLOR_DEFAULT = 0x371c;
 const uint16_t Esp32RobotEyes::COLOR_BACKGROUND_DEFAULT = 0x632c;
 
-const unsigned long Esp32RobotEyes::UPDATE_LAST_DEFAULT = 0;
-const unsigned long Esp32RobotEyes::UPDATE_MS_DEFAULT = 20;
+const unsigned long Esp32RobotEyes::TIME_LAST_DEFAULT = 0;
+const unsigned long Esp32RobotEyes::TIME_UPDATE = 20;
 
 Esp32RobotEyes::Esp32RobotEyes(void) :
   data() {
@@ -29,8 +29,7 @@ Esp32RobotEyes::Esp32RobotEyes(const Esp32RobotEyes &copy) :
   data.color = copy.data.color;
   data.color_background = copy.data.color_background;
 
-  data.update_last = copy.data.update_last;
-  data.update_ms = copy.data.update_ms;
+  data.last = copy.data.last;
 
   data.mood = copy.data.mood;
   data.position = copy.data.position;
@@ -48,8 +47,7 @@ Esp32RobotEyes &Esp32RobotEyes::operator=(const Esp32RobotEyes &other) {
     data.color = other.data.color;
     data.color_background = other.data.color_background;
 
-    data.update_last = other.data.update_last;
-    data.update_ms = other.data.update_ms;
+    data.last = other.data.last;
 
     data.mood = other.data.mood;
     data.position = other.data.position;
@@ -90,13 +88,23 @@ void Esp32RobotEyes::SetPosition(const Position &position) {
 void Esp32RobotEyes::OnSetup(void) {
   data.display->begin(SSD1306_SWITCHCAPVCC, 0x3D);
   data.display->clearDisplay();
+  display->display();
 }
 
 void Esp32RobotEyes::OnLoop(void) {
-  data.display->clearDisplay();
+  unsigned long now = millis();
+  unsigned long difference = now - data.last;
 
-  DrawBackground();
-  DrawEyes();
+  if(difference >= TIME_UPDATE){
+    data.last = now;
+    
+    data.display->clearDisplay();
+
+    DrawBackground();
+    DrawEyes();
+
+    display->display();
+  }
 }
 
 void Esp32RobotEyes::OnEnd(void) {

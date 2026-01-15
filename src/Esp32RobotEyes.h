@@ -20,8 +20,8 @@ public:
   static const uint16_t COLOR_DEFAULT;
   static const uint16_t COLOR_BACKGROUND_DEFAULT;
 
-  static const unsigned long UPDATE_LAST_DEFAULT;
-  static const unsigned long UPDATE_MS_DEFAULT;
+  static const unsigned long TIME_LAST_DEFAULT;
+  static const unsigned long TIME_UPDATE;
 
   enum Mood {
     MOOD_NORMAL,
@@ -73,8 +73,7 @@ protected:
     uint16_t color;
     uint16_t color_background;
 
-    unsigned long update_last;
-    unsigned long update_ms;
+    unsigned long last;
 
     Mood mood;
     Position position;
@@ -85,8 +84,7 @@ protected:
       height(HEIGHT_DEFAULT),
       color(COLOR_DEFAULT),
       color_background(COLOR_BACKGROUND_DEFAULT),
-      update_last(UPDATE_LAST_DEFAULT),
-      update_ms(UPDATE_MS_DEFAULT),
+      last(UPDATE_LAST_DEFAULT),
       mood(MOOD_NORMAL),
       position(POS_CENTER) {
     }
