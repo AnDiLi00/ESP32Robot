@@ -1,5 +1,9 @@
+#include <Adafruit_SSD1306.h>
 #include <Esp32Robot.h>
 #include <RemoteXY.h>
+
+// Display setup
+Adafruit_SSD1306 display(Esp32RobotEyes::WIDTH_DEFAULT, Esp32RobotEyes::HEIGHT_DEFAULT, &Wire, OLED_RESET);
 
 // RemoteXY GUI configuration
 #pragma pack(push, 1)
@@ -46,6 +50,20 @@ void setup() {
   RemoteXYEngine.addVariableEvent(RemoteXY.mode, RemoteXY_mode_event);
   RemoteXYEngine.addVariableEvent(RemoteXY.speed, RemoteXY_speed_event);
   RemoteXYEngine.addVariableEvent(RemoteXY.steering, RemoteXY_steering_event);
+
+  // Esp32Robot Setup
+  Esp32Robot.SetPin(Esp32Robot::PART_LEFT_DRIVE, 5);
+  Esp32Robot.SetPin(Esp32Robot::PART_RIGHT_DRIVE, 23);
+  Esp32Robot.SetPin(Esp32Robot::PART_LEFT_ANKLE, 19);
+  Esp32Robot.SetPin(Esp32Robot::PART_RIGHT_ANKLE, 18);
+  Esp32Robot.SetOffset(Esp32Robot::PART_LEFT_ANKLE, Esp32Robot::MOVE_WALK, 0);
+  Esp32Robot.SetOffset(Esp32Robot::PART_RIGHT_ANKLE, Esp32Robot::MOVE_WALK, 2);
+  Esp32Robot.SetOffset(Esp32Robot::PART_LEFT_ANKLE, Esp32Robot::MOVE_DRIVE, 0);
+  Esp32Robot.SetOffset(Esp32Robot::PART_RIGHT_ANKLE, Esp32Robot::MOVE_DRIVE, 0);
+  Esp32Robot.SetMode(Esp32Robot::MOVE_WALK);
+
+  // Esp32RobotEyes Setup
+  Esp32Robot.SetDisplay(display);
 
   Esp32Robot.OnSetup();
 }

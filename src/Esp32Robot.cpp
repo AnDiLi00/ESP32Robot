@@ -15,10 +15,12 @@ const int8_t Esp32Robot::WALK_ANKLE_RIGHT_DEFAULT = 125;
 const int8_t Esp32Robot::WALK_ARM_DEFAULT = 45;
 
 Esp32Robot::Esp32Robot(void) :
+  Esp32RobotEyes(),
   data() {
 }
 
 Esp32Robot::Esp32Robot(const Esp32Robot &copy) :
+  Esp32RobotEyes(copy),
   data() {
 
   for (int8_t i = 0; i < PART_PARTS; i++) {
@@ -41,6 +43,8 @@ Esp32Robot::~Esp32Robot(void) {
 
 Esp32Robot &Esp32Robot::operator=(const Esp32Robot &other) {
   if (&other != this) {
+    Esp32RobotEyes::operator=(other);
+
     for (int8_t i = 0; i < PART_PARTS; i++) {
       data.pins[i] = other.data.pins[i];
       data.offsets_drive[i] = other.data.offsets_drive[i];
@@ -139,15 +143,19 @@ void Esp32Robot::SetMode(const MovementMode &mode) {
 }
 
 void Esp32Robot::OnSetup(void) {
+  Esp32RobotEyes::OnSetup();
 }
 
 void Esp32Robot::OnLoop(void) {
+  Esp32RobotEyes::OnLoop();
 }
 
 void Esp32Robot::OnEnd(void) {
   for (int8_t i = 0; i < PART_PARTS; i++) {
     data.servos[i].detach();
   }
+
+  Esp32RobotEyes::OnEnd();
 }
 
 void Esp32Robot::OnModeChange(const uint8_t &mode) {

@@ -3,11 +3,12 @@
 
 #include <stdint.h>
 
-#include <Arduino.h>
 #include <BLEDevice.h>
 #include <ESP32Servo.h>
 
-class Esp32Robot {
+#include "Esp32RobotEyes.h"
+
+class Esp32Robot : public Esp32RobotEyes {
 public:
   static const int8_t PIN_NOPIN;
   static const int8_t OFFSET_DEFAULT;
