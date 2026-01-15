@@ -42,9 +42,9 @@ public:
   };
 
   Esp32RobotEyes(void);
-  Esp32RobotEyes(const Esp32Robot &copy);
+  Esp32RobotEyes(const Esp32RobotEyes &copy);
   virtual ~Esp32RobotEyes(void);
-  Esp32RobotEyes &operator=(const Esp32Robot &other);
+  Esp32RobotEyes &operator=(const Esp32RobotEyes &other);
 
   virtual void SetDisplay(Adafruit_SSD1306 *display);
   virtual void SetDisplayDimensions(uint8_t width, uint8_t height);
@@ -80,7 +80,7 @@ protected:
     Position position;
 
     Data(void) :
-      display(NULL)
+      display(NULL),
       width(WIDTH_DEFAULT),
       height(HEIGHT_DEFAULT),
       color(COLOR_DEFAULT),

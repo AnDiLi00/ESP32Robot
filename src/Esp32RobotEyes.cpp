@@ -1,7 +1,7 @@
 #include "Esp32RobotEyes.h"
 
-const int8_t Esp32RobotEyes::WIDTH_DEFAULT = 128;
-const int8_t Esp32RobotEyes::HEIGHT_DEFAULT = 64;
+const uint8_t Esp32RobotEyes::WIDTH_DEFAULT = 128;
+const uint8_t Esp32RobotEyes::HEIGHT_DEFAULT = 64;
 
 const uint8_t Esp32RobotEyes::EYE_WIDTH = 30;
 const uint8_t Esp32RobotEyes::EYE_HEIGHT = 30;
@@ -155,6 +155,6 @@ void Esp32RobotEyes::DrawEyes(void) {
   uint8_t eye_right_x = position_x + EYE_DISTANCE / 2;
   uint8_t eye_right_y = position_y - eyes_height / 2;
 
-  display->fillRoundRect(eye_left_x, eye_left_y, EYE_WIDTH, EYE_HEIGHT, EYE_CORNER, data.color);
-  display->fillRoundRect(eye_right_x, eye_right_y, EYE_WIDTH, EYE_HEIGHT, EYE_CORNER, data.color);
+  data.display->fillRoundRect(eye_left_x, eye_left_y, EYE_WIDTH, EYE_HEIGHT, EYE_CORNER, data.color);
+  data.display->fillRoundRect(eye_right_x, eye_right_y, EYE_WIDTH, EYE_HEIGHT, EYE_CORNER, data.color);
 }

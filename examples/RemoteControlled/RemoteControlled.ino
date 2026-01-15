@@ -3,7 +3,7 @@
 #include <RemoteXY.h>
 
 // Display setup
-Adafruit_SSD1306 display(Esp32RobotEyes::WIDTH_DEFAULT, Esp32RobotEyes::HEIGHT_DEFAULT, &Wire, OLED_RESET);
+Adafruit_SSD1306 display(Esp32RobotEyes::WIDTH_DEFAULT, Esp32RobotEyes::HEIGHT_DEFAULT);
 
 // RemoteXY GUI configuration
 #pragma pack(push, 1)
@@ -63,7 +63,7 @@ void setup() {
   Esp32Robot.SetMode(Esp32Robot::MOVE_WALK);
 
   // Esp32RobotEyes Setup
-  Esp32Robot.SetDisplay(display);
+  Esp32Robot.SetDisplay(&display);
 
   Esp32Robot.OnSetup();
 }
