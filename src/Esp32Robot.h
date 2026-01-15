@@ -72,7 +72,7 @@ protected:
     int8_t pins[PART_PARTS];
     int8_t offsets_drive[PART_PARTS];
     int8_t offsets_walk[PART_PARTS];
-    int8_t position[PART_PARTS];
+    int8_t positions[PART_PARTS];
     Servo servos[PART_PARTS];
 
     MovementMode mode;
@@ -84,7 +84,7 @@ protected:
         pins[i] = PIN_NOPIN;
         offsets_drive[i] = OFFSET_DEFAULT;
         offsets_walk[i] = OFFSET_DEFAULT;
-        position[i] = POSITION_DEFAULT;
+        positions[i] = POSITION_DEFAULT;
       }
     }
   };
