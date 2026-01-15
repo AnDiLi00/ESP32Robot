@@ -1,5 +1,9 @@
 #include "Esp32RobotEyes.h"
 
+const uint16_t Esp32RobotEyes::DISPLAY_WIDTH = 128;
+const uint16_t Esp32RobotEyes::DISPLAY_HEIGHT = 64;
+const uint16_t Esp32RobotEyes::DISPLAY_RESET = 4;
+
 const uint16_t Esp32RobotEyes::EYE_WIDTH = 30;
 const uint16_t Esp32RobotEyes::EYE_HEIGHT = 30;
 const uint16_t Esp32RobotEyes::EYE_DISTANCE = 16;

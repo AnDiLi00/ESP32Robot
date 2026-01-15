@@ -7,6 +7,10 @@
 
 class Esp32RobotEyes {
 public:
+  static const uint16_t DISPLAY_WIDTH;
+  static const uint16_t DISPLAY_HEIGHT;
+  static const uint16_t DISPLAY_RESET;
+
   static const uint16_t EYE_WIDTH;
   static const uint16_t EYE_HEIGHT;
   static const uint16_t EYE_DISTANCE;

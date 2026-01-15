@@ -3,7 +3,7 @@
 #include <RemoteXY.h>
 
 // Display setup
-Adafruit_SSD1306 display(128, 64, &Wire, 4);
+Adafruit_SSD1306 display(Esp32RobotEyes::DISPLAY_WIDTH, Esp32RobotEyes::DISPLAY_HEIGHT, &Wire, Esp32RobotEyes::DISPLAY_RESET);
 
 // RemoteXY GUI configuration
 #pragma pack(push, 1)
