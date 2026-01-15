@@ -3,22 +3,15 @@
 
 #include <stdint.h>
 
-#include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
 class Esp32RobotEyes {
 public:
-  static const uint8_t WIDTH_DEFAULT;
-  static const uint8_t HEIGHT_DEFAULT;
-
-  static const uint8_t EYE_WIDTH;
-  static const uint8_t EYE_HEIGHT;
-  static const uint8_t EYE_DISTANCE;
-  static const uint8_t EYE_CORNER;
-  static const uint8_t EYE_BORDER;
-
-  static const uint16_t COLOR_DEFAULT;
-  static const uint16_t COLOR_BACKGROUND_DEFAULT;
+  static const uint16_t EYE_WIDTH;
+  static const uint16_t EYE_HEIGHT;
+  static const uint16_t EYE_DISTANCE;
+  static const uint16_t EYE_CORNER;
+  static const uint16_t EYE_BORDER;
 
   static const unsigned long TIME_LAST_DEFAULT;
   static const unsigned long TIME_UPDATE;
@@ -47,11 +40,6 @@ public:
   Esp32RobotEyes &operator=(const Esp32RobotEyes &other);
 
   virtual void SetDisplay(Adafruit_SSD1306 *display);
-  virtual void SetDisplayDimensions(uint8_t width, uint8_t height);
-
-  virtual void SetEyeColor(uint8_t red, uint8_t green, uint8_t blue);
-  virtual void SetBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
-
   virtual void SetMood(const Mood &mood);
   virtual void SetPosition(const Position &position);
 
@@ -60,33 +48,22 @@ public:
   virtual void OnEnd(void);
 
 protected:
-  virtual uint16_t GetColor(uint8_t red, uint8_t green, uint8_t blue) const;
-
   virtual void DrawBackground(void);
   virtual void DrawEyes(void);
 
   struct Data {
     Adafruit_SSD1306 *display;
-    uint8_t width;
-    uint8_t height;
-
-    uint16_t color;
-    uint16_t color_background;
-
-    unsigned long last;
 
     Mood mood;
     Position position;
 
+    unsigned long last;
+
     Data(void) :
       display(NULL),
-      width(WIDTH_DEFAULT),
-      height(HEIGHT_DEFAULT),
-      color(COLOR_DEFAULT),
-      color_background(COLOR_BACKGROUND_DEFAULT),
-      last(TIME_LAST_DEFAULT),
       mood(MOOD_NORMAL),
-      position(POS_CENTER) {
+      position(POS_CENTER),
+      last(TIME_LAST_DEFAULT) {
     }
   };
 
