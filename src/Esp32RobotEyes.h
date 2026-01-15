@@ -84,7 +84,7 @@ protected:
       height(HEIGHT_DEFAULT),
       color(COLOR_DEFAULT),
       color_background(COLOR_BACKGROUND_DEFAULT),
-      last(UPDATE_LAST_DEFAULT),
+      last(TIME_LAST_DEFAULT),
       mood(MOOD_NORMAL),
       position(POS_CENTER) {
     }
