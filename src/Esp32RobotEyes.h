@@ -11,8 +11,15 @@ public:
   static const uint16_t DISPLAY_HEIGHT;
   static const uint16_t DISPLAY_RESET;
 
-  static const unsigned long TIME_LAST_DEFAULT;
+  static const unsigned long TIME_DEFAULT;
   static const unsigned long TIME_UPDATE;
+  static const unsigned long TIME_IDLE;
+
+  enum Animation {
+    ANIM_IDLE,
+    ANIM_BLINK,
+    ANIM_SHAKE
+  };
 
   Esp32RobotEyes(void);
   Esp32RobotEyes(const Esp32RobotEyes &copy);
@@ -31,14 +38,19 @@ protected:
   virtual void DrawBackground(void);
   virtual void DrawEyes(void);
 
+  virtual unsigned long GetRandomIdleDuration(void);
+
   struct Data {
     Adafruit_SSD1306 *display;
 
     Esp32RobotEye::Mood mood;
-    Esp32RobotEye::Animation animation;
     Esp32RobotEye::Position position;
 
-    unsigned long last;
+    Esp32RobotAnimation::Animation animation;
+
+    unsigned long last_update;
+    unsigned long last_idle;
+    unsigned long duration;
 
     Esp32RobotEye eyes[Esp32RobotEye::EYES];
     Esp32RobotEye eyes_new[Esp32RobotEye::EYES];
@@ -48,7 +60,9 @@ protected:
       mood(MOOD_NORMAL),
       animation(ANIM_IDLE),
       position(POS_CENTER),
-      last(TIME_LAST_DEFAULT) {
+      last_update(TIME_DEFAULT),
+      last_idle(TIME_DEFAULT),
+      duration(TIME_DEFAULT) {
     }
   };
 

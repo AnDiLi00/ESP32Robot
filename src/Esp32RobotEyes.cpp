@@ -10,8 +10,9 @@ const uint16_t Esp32RobotEyes::EYE_DISTANCE = 16;
 const uint16_t Esp32RobotEyes::EYE_CORNER = 8;
 const uint16_t Esp32RobotEyes::EYE_BORDER = 10;
 
-const unsigned long Esp32RobotEyes::TIME_LAST_DEFAULT = 0;
+const unsigned long Esp32RobotEyes::TIME_DEFAULT = 0;
 const unsigned long Esp32RobotEyes::TIME_UPDATE = 20;
+const unsigned long Esp32RobotEyes::TIME_IDLE = 5000;
 
 Esp32RobotEyes::Esp32RobotEyes(void) :
   data() {
@@ -26,7 +27,9 @@ Esp32RobotEyes::Esp32RobotEyes(const Esp32RobotEyes &copy) :
   data.animation = copy.data.animation;
   data.position = copy.data.position;
 
-  data.last = copy.data.last;
+  data.last_update = copy.data.last_update;
+  data.last_idle = copy.data.last_idle;
+  data.duration = copy.data.duration;
 
   for (uint8_t i = 0; i < Esp32RobotEye::EYES; i++) {
     data.eyes[i] = copy.data.eyes[i];
@@ -45,7 +48,9 @@ Esp32RobotEyes &Esp32RobotEyes::operator=(const Esp32RobotEyes &other) {
     data.animation = other.data.animation;
     data.position = other.data.position;
 
-    data.last = other.data.last;
+    data.last_update = other.data.last_update;
+    data.last_idle = other.data.last_idle;
+    data.duration = other.data.duration;
 
     for (uint8_t i = 0; i < Esp32RobotEye::EYES; i++) {
       data.eyes[i] = other.data.eyes[i];
@@ -81,6 +86,8 @@ void Esp32RobotEyes::OnSetup(void) {
   data.display->clearDisplay();
   data.display->display();
 
+  data.duration = GetRandomIdleDuration();
+
   Esp32RobotEye::GetEyes(data.display->width(), data.display->height(), data.mood, data.position, data.eyes);
   for (uint8_t i = 0; i < Esp32RobotEye::EYES; i++) {
     data.eyes_new[i] = data.eyes[i];
@@ -93,10 +100,29 @@ void Esp32RobotEyes::OnLoop(void) {
   }
 
   unsigned long now = millis();
-  unsigned long difference = now - data.last;
+  unsigned long difference_idle = now - data.last_idle;
+  unsigned long difference_update = now - data.last_update;
 
-  if (difference >= TIME_UPDATE) {
-    data.last = now;
+  switch (data.animation) {
+    case ANIM_IDLE:
+      if (difference_idle >= data.duration) {
+        data.last_idle = now;
+        data.duration = GetRandomIdleDuration();
+
+        if (data.animation == ANIM_IDLE) {
+          data.animation = ANIM_BLINK;
+          Esp32RobotEye::GetEyes(data.display->width(), data.display->height(), Esp32RobotEye::MOOD_CLOSED, data.position, data.eyes_new);
+        }
+      }
+      break;
+    case ANIM_BLINK:
+      break;
+    case ANIM_SHAKE:
+      break;
+  }
+
+  if (difference_update >= TIME_UPDATE) {
+    data.last_update = now;
 
     data.display->clearDisplay();
 
@@ -120,4 +146,9 @@ void Esp32RobotEyes::DrawEyes(void) {
 
     data.eyes[i].Draw(data.display, i, data.mood);
   }
+}
+
+unsigned long Esp32RobotEyes::GetRandomIdleDuration(void) {
+  unsigned long random = (unsigned long)random(TIME_IDLE / 4);
+  return (TIMER_IDLE + random);
 }

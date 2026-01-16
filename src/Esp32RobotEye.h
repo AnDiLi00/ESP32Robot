@@ -29,7 +29,6 @@ public:
   enum Animation {
     ANIM_IDLE,
     ANIM_BLINK,
-    ANIM_TIRED,
     ANIM_SHAKE
   };
 
