@@ -30,6 +30,7 @@ Esp32RobotEyes::Esp32RobotEyes(const Esp32RobotEyes &copy) :
 
   for (uint8_t i = 0; i < Esp32RobotEye::EYES; i++) {
     data.eyes[i] = copy.data.eyes[i];
+    data.eyes_new[i] = copy.data.eyes_new[i];
   }
 }
 
@@ -48,6 +49,7 @@ Esp32RobotEyes &Esp32RobotEyes::operator=(const Esp32RobotEyes &other) {
 
     for (uint8_t i = 0; i < Esp32RobotEye::EYES; i++) {
       data.eyes[i] = other.data.eyes[i];
+      data.eyes_new[i] = other.data.eyes_new[i];
     }
   }
 
@@ -78,6 +80,11 @@ void Esp32RobotEyes::OnSetup(void) {
   data.display->begin(SSD1306_SWITCHCAPVCC, 0x3C);
   data.display->clearDisplay();
   data.display->display();
+
+  Esp32RobotEye::GetEyes(data.display->width(), data.display->height(), data.mood, data.position, data.eyes);
+  for (uint8_t i = 0; i < Esp32RobotEye::EYES; i++) {
+    data.eyes_new[i] = data.eyes[i];
+  }
 }
 
 void Esp32RobotEyes::OnLoop(void) {
@@ -108,9 +115,9 @@ void Esp32RobotEyes::DrawBackground(void) {
 }
 
 void Esp32RobotEyes::DrawEyes(void) {
-  Esp32RobotEye::GetEyes(data.display->width(), data.display->height(), data.mood, data.position, data.eyes);
-
   for (uint8_t i = 0; i < Esp32RobotEye::EYES; i++) {
+    Esp32RobotEye::UpdateEye(data.eyes[i], data.eyes_new[i]);
+
     data.eyes[i].Draw(data.display, i, data.mood);
   }
 }

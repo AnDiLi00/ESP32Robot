@@ -53,6 +53,7 @@ public:
   virtual void Draw(Adafruit_SSD1306 *display, const Eye &eye, const Mood &mood) const;
 
   static void GetEyes(const uint16_t &width, const uint16_t &height, const Mood &mood, const Position &position, Esp32RobotEye (&eyes)[EYES]);
+  static void UpdateEye(Esp32RobotEye &eye, Esp32RobotEye &eye_new);
 
   int16_t x;
   int16_t y;

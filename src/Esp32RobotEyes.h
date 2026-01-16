@@ -41,6 +41,7 @@ protected:
     unsigned long last;
 
     Esp32RobotEye eyes[Esp32RobotEye::EYES];
+    Esp32RobotEye eyes_new[Esp32RobotEye::EYES];
 
     Data(void) :
       display(NULL),

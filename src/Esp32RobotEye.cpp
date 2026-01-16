@@ -127,3 +127,29 @@ void Esp32RobotEye::GetEyes(const uint16_t &width, const uint16_t &height, const
   eyes[EYE_RIGHT].x = position_x + EYE_DISTANCE / 2 + (EYE_WIDTH - eyes[EYE_RIGHT].w) / 2;
   eyes[EYE_RIGHT].y = position_y - eyes[EYE_RIGHT].h / 2;
 }
+
+void Esp32RobotEye::UpdateEye(Esp32RobotEye &eye, Esp32RobotEye &eye_new) {
+  if (data.eyes_new[i].x < data.eyes[i].x) {
+    data.eyes[i].x--;
+  } else if (data.eyes_new[i].x > data.eyes[i].x) {
+    data.eyes[i].x++;
+  }
+
+  if (data.eyes_new[i].y < data.eyes[i].y) {
+    data.eyes[i].y--;
+  } else if (data.eyes_new[i].y > data.eyes[i].y) {
+    data.eyes[i].y++;
+  }
+
+  if (data.eyes_new[i].w < data.eyes[i].w) {
+    data.eyes[i].w--;
+  } else if (data.eyes_new[i].w > data.eyes[i].w) {
+    data.eyes[i].w++;
+  }
+
+  if (data.eyes_new[i].h < data.eyes[i].h) {
+    data.eyes[i].h--;
+  } else if (data.eyes_new[i].h > data.eyes[i].h) {
+    data.eyes[i].h++;
+  }
+}
