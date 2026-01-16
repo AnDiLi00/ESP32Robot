@@ -5,6 +5,8 @@
 
 class Esp32RobotEye {
 public:
+  static const int16_t EYE_VALUE_DEFAULT;
+
   static const uint16_t EYE_WIDTH;
   static const uint16_t EYE_HEIGHT;
   static const uint16_t EYE_HEIGHT_EXTENDED;
@@ -12,9 +14,11 @@ public:
   static const uint16_t EYE_CORNER;
   static const uint16_t EYE_BORDER;
 
+  static const int16_t FACTOR;
+
   enum Eye {
     EYE_LEFT,
-    EYE_RIGHT
+    EYE_RIGHT,
     EYES
   };
 
@@ -23,13 +27,8 @@ public:
     MOOD_CONFUSED,
     MOOD_ANGRY,
     MOOD_TIRED,
-    MOOD_CLOSED
-  };
-
-  enum Animation {
-    ANIM_IDLE,
-    ANIM_BLINK,
-    ANIM_SHAKE
+    MOOD_CLOSED,
+    MOODS
   };
 
   enum Position {
@@ -41,13 +40,16 @@ public:
     POS_TOP_RIGHT,
     POS_BOTTOM,
     POS_BOTTOM_LEFT,
-    POS_BOTTOM_RIGHT
+    POS_BOTTOM_RIGHT,
+    POSITIONS
   };
 
   Esp32RobotEye(void);
   Esp32RobotEye(const Esp32RobotEye &copy);
   virtual ~Esp32RobotEye(void);
   Esp32RobotEye &operator=(const Esp32RobotEye &other);
+  bool operator==(const Esp32RobotEye &comp);
+  bool operator!=(const Esp32RobotEye &comp);
 
   virtual void Draw(Adafruit_SSD1306 *display, const Eye &eye, const Mood &mood) const;
 
@@ -58,6 +60,11 @@ public:
   int16_t y;
   int16_t w;
   int16_t h;
+
+  int16_t increment_x;
+  int16_t increment_y;
+  int16_t increment_w;
+  int16_t increment_h;
 };
 
 #endif

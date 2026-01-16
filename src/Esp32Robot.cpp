@@ -166,6 +166,11 @@ void Esp32Robot::OnEnd(void) {
 void Esp32Robot::OnModeChange(const uint8_t &mode) {
   Serial.print("OnModeChange::mode=");
   Serial.println(mode);
+  if (mode == 1) {
+    SetMode(MOVE_WALK);
+  } else {
+    SetMode(MOVE_DRIVE);
+  }
 }
 
 void Esp32Robot::OnSpeedChange(const int8_t &speed) {
@@ -179,17 +184,11 @@ void Esp32Robot::OnSteeringChange(const int8_t &steering) {
 }
 
 void Esp32Robot::OnOffsetLeftChange(const int8_t &left_offset) {
-  Serial.print("OnOffsetLeftChange::offset=");
-  Serial.println(left_offset);
-
   SetOffset(PART_LEFT_ANKLE, data.mode, left_offset);
   Update(PART_LEFT_ANKLE);
 }
 
 void Esp32Robot::OnOffsetRightChange(const int8_t &right_offset) {
-  Serial.print("OnOffsetRightChange::offset=");
-  Serial.println(right_offset);
-
   SetOffset(PART_RIGHT_ANKLE, data.mode, right_offset);
   Update(PART_RIGHT_ANKLE);
 }

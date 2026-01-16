@@ -21,6 +21,12 @@ public:
     ANIM_SHAKE
   };
 
+  enum SubAnimation {
+    SUB_NONE,
+    SUB_CLOSING,
+    SUB_OPENING,
+  };
+
   Esp32RobotEyes(void);
   Esp32RobotEyes(const Esp32RobotEyes &copy);
   virtual ~Esp32RobotEyes(void);
@@ -40,29 +46,36 @@ protected:
 
   virtual unsigned long GetRandomIdleDuration(void);
 
+  virtual bool CheckEyes(void);
+
   struct Data {
     Adafruit_SSD1306 *display;
 
     Esp32RobotEye::Mood mood;
     Esp32RobotEye::Position position;
 
-    Esp32RobotAnimation::Animation animation;
+    Animation animation;
+    SubAnimation animation_sub;
 
     unsigned long last_update;
     unsigned long last_idle;
     unsigned long duration;
+
+    int8_t anim;
 
     Esp32RobotEye eyes[Esp32RobotEye::EYES];
     Esp32RobotEye eyes_new[Esp32RobotEye::EYES];
 
     Data(void) :
       display(NULL),
-      mood(MOOD_NORMAL),
+      mood(Esp32RobotEye::MOOD_NORMAL),
+      position(Esp32RobotEye::POS_CENTER),
       animation(ANIM_IDLE),
-      position(POS_CENTER),
+      animation_sub(SUB_NONE),
       last_update(TIME_DEFAULT),
       last_idle(TIME_DEFAULT),
-      duration(TIME_DEFAULT) {
+      duration(TIME_DEFAULT),
+      anim(0) {
     }
   };
 

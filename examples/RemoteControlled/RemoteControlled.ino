@@ -42,6 +42,8 @@ void RemoteXY_steering_event() {
 }
 
 void setup() {
+  randomSeed(1158060980);
+
   Serial.begin(115200);
 
   RemoteXYGui *gui = RemoteXYEngine.addGui(RemoteXY_CONF_PROGMEM, &RemoteXY);
@@ -50,6 +52,8 @@ void setup() {
   RemoteXYEngine.addVariableEvent(RemoteXY.mode, RemoteXY_mode_event);
   RemoteXYEngine.addVariableEvent(RemoteXY.speed, RemoteXY_speed_event);
   RemoteXYEngine.addVariableEvent(RemoteXY.steering, RemoteXY_steering_event);
+  // set remotexy mode to 'walk' since robot is set to walk 
+  RemoteXY.mode = 1;
 
   // Esp32Robot Setup
   Esp32Robot.SetPin(Esp32Robot::PART_LEFT_DRIVE, 5);
@@ -61,7 +65,7 @@ void setup() {
   Esp32Robot.SetOffset(Esp32Robot::PART_LEFT_ANKLE, Esp32Robot::MOVE_DRIVE, 0);
   Esp32Robot.SetOffset(Esp32Robot::PART_RIGHT_ANKLE, Esp32Robot::MOVE_DRIVE, 0);
   Esp32Robot.SetMode(Esp32Robot::MOVE_WALK);
-
+  
   // Esp32RobotEyes Setup
   Esp32Robot.SetDisplay(&display);
 
