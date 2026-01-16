@@ -3,38 +3,16 @@
 
 #include <Adafruit_SSD1306.h>
 
+#include "Esp32RobotEye.h"
+
 class Esp32RobotEyes {
 public:
   static const uint16_t DISPLAY_WIDTH;
   static const uint16_t DISPLAY_HEIGHT;
   static const uint16_t DISPLAY_RESET;
 
-  static const uint16_t EYE_WIDTH;
-  static const uint16_t EYE_HEIGHT;
-  static const uint16_t EYE_DISTANCE;
-  static const uint16_t EYE_CORNER;
-  static const uint16_t EYE_BORDER;
-
   static const unsigned long TIME_LAST_DEFAULT;
   static const unsigned long TIME_UPDATE;
-
-  enum Mood {
-    MOOD_NORMAL,
-    MOOD_CONFUSED,
-    MOOD_ANGRY
-  };
-
-  enum Position {
-    POS_CENTER,
-    POS_CENTER_LEFT,
-    POS_CENTER_RIGHT,
-    POS_TOP,
-    POS_TOP_LEFT,
-    POS_TOP_RIGHT,
-    POS_BOTTOM,
-    POS_BOTTOM_LEFT,
-    POS_BOTTOM_RIGHT
-  };
 
   Esp32RobotEyes(void);
   Esp32RobotEyes(const Esp32RobotEyes &copy);
@@ -42,8 +20,8 @@ public:
   Esp32RobotEyes &operator=(const Esp32RobotEyes &other);
 
   virtual void SetDisplay(Adafruit_SSD1306 *display);
-  virtual void SetMood(const Mood &mood);
-  virtual void SetPosition(const Position &position);
+  virtual void SetMood(const Esp32RobotEye::Mood &mood);
+  virtual void SetPosition(const Esp32RobotEye::Position &position);
 
   virtual void OnSetup(void);
   virtual void OnLoop(void);
@@ -56,14 +34,18 @@ protected:
   struct Data {
     Adafruit_SSD1306 *display;
 
-    Mood mood;
-    Position position;
+    Esp32RobotEye::Mood mood;
+    Esp32RobotEye::Animation animation;
+    Esp32RobotEye::Position position;
 
     unsigned long last;
+
+    Esp32RobotEye eyes[Esp32RobotEye::EYES];
 
     Data(void) :
       display(NULL),
       mood(MOOD_NORMAL),
+      animation(ANIM_IDLE),
       position(POS_CENTER),
       last(TIME_LAST_DEFAULT) {
     }

@@ -23,7 +23,7 @@ Esp32Robot::Esp32Robot(const Esp32Robot &copy) :
   Esp32RobotEyes(copy),
   data() {
 
-  for (int8_t i = 0; i < PART_PARTS; i++) {
+  for (uint8_t i = 0; i < PART_PARTS; i++) {
     data.pins[i] = copy.data.pins[i];
     data.offsets_drive[i] = copy.data.offsets_drive[i];
     data.offsets_walk[i] = copy.data.offsets_walk[i];
@@ -45,7 +45,7 @@ Esp32Robot &Esp32Robot::operator=(const Esp32Robot &other) {
   if (&other != this) {
     Esp32RobotEyes::operator=(other);
 
-    for (int8_t i = 0; i < PART_PARTS; i++) {
+    for (uint8_t i = 0; i < PART_PARTS; i++) {
       data.pins[i] = other.data.pins[i];
       data.offsets_drive[i] = other.data.offsets_drive[i];
       data.offsets_walk[i] = other.data.offsets_walk[i];
