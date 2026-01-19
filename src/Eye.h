@@ -3,7 +3,7 @@
 
 #include <Adafruit_SSD1306.h>
 
-#include "Animation.h"
+#include "Types.h"
 
 class Eye {
 public:
@@ -18,25 +18,6 @@ public:
 
   static const int16_t FACTOR;
 
-  enum Type {
-    EYE_LEFT,
-    EYE_RIGHT,
-    EYES
-  };
-
-  enum Position {
-    POS_CENTER,
-    POS_CENTER_LEFT,
-    POS_CENTER_RIGHT,
-    POS_TOP,
-    POS_TOP_LEFT,
-    POS_TOP_RIGHT,
-    POS_BOTTOM,
-    POS_BOTTOM_LEFT,
-    POS_BOTTOM_RIGHT,
-    POSITIONS
-  };
-
   Eye(void);
   Eye(const Eye &copy);
   virtual ~Eye(void);
@@ -45,9 +26,9 @@ public:
   bool operator!=(const Eye &comp);
 
   virtual void Transition(Eye &eye_new);
-  virtual void Draw(Adafruit_SSD1306 *display, const Animation::Mood &mood, const Type &type) const;
+  virtual void Draw(Adafruit_SSD1306 *display, const Types::Mood &mood, const Types::EyeType &type) const;
 
-  static void GetEyes(const uint16_t &width, const uint16_t &height, const Animation::Mood &mood, const Position &position, Eye (&eyes)[EYES]);
+  static void GetEyes(const uint16_t &width, const uint16_t &height, const Types::Mood &mood, const Types::EyePosition &position, Eye (&eyes)[Types::EYES]);
 
   int16_t x;
   int16_t y;

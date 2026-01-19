@@ -2,6 +2,7 @@
 #define __animation_h__
 
 #include "Eyes.h"
+#include "Types.h"
 
 class Animation {
 public:
@@ -10,33 +11,12 @@ public:
   static const unsigned long TIME_IDLE;
   static const unsigned long TIME_IDLE_VARIANCE;
 
-  enum Mood {
-    MOOD_NORMAL,
-    MOOD_CONFUSED,
-    MOOD_ANGRY,
-    MOOD_TIRED,
-    MOOD_CLOSED,
-    MOODS
-  };
-
-  enum Type {
-    ANIM_IDLE,
-    ANIM_BLINK,
-    ANIM_SHAKE
-  };
-
-  enum SubType {
-    SUB_NONE,
-    SUB_CLOSING,
-    SUB_OPENING,
-  };
-
   Animation(void);
   Animation(const Animation &copy);
   virtual ~Animation(void);
   Animation &operator=(const Animation &other);
 
-  virtual void SetMood(const Mood &mood);
+  virtual void SetMood(const Types::Mood &mood);
 
   virtual void OnSetup(void);
   virtual void OnLoop(void);
@@ -48,10 +28,10 @@ protected:
   virtual unsigned long GetIdleDuration(void);
 
   struct Data {
-    Mood mood;
+    Types::Mood mood;
 
-    Type animation;
-    SubType animation_sub;
+    Types::AnimType animation;
+    Types::AnimSubType animation_sub;
 
     unsigned long last_update;
     unsigned long last_idle;
@@ -62,9 +42,9 @@ protected:
     int8_t anim;
 
     Data(void) :
-      mood(MOOD_NORMAL),
-      animation(ANIM_IDLE),
-      animation_sub(SUB_NONE),
+      mood(Types::MOOD_NORMAL),
+      animation(Types::ANIM_IDLE),
+      animation_sub(Types::SUB_NONE),
       last_update(TIME_DEFAULT),
       last_idle(TIME_DEFAULT),
       duration(TIME_DEFAULT),

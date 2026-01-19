@@ -118,7 +118,7 @@ void Eye::Transition(Eye &eye_new) {
   }
 }
 
-void Eye::Draw(Adafruit_SSD1306 *display, const Animation::Mood &mood, const Type &type) const {
+void Eye::Draw(Adafruit_SSD1306 *display, const Types::Mood &mood, const Type &type) const {
   if (display == NULL) {
     return;
   }
@@ -130,26 +130,26 @@ void Eye::Draw(Adafruit_SSD1306 *display, const Animation::Mood &mood, const Typ
   display->fillRoundRect(x1, y1, w1, h1, EYE_CORNER, SSD1306_WHITE);
 
   switch (mood) {
-    case Animation::MOOD_NORMAL:
-    case Animation::MOOD_CONFUSED:
-    case Animation::MOOD_CLOSED:
-    case Animation::MOODS:
+    case Types::MOOD_NORMAL:
+    case Types::MOOD_CONFUSED:
+    case Types::MOOD_CLOSED:
+    case Types::MOODS:
       break;
-    case Animation::MOOD_ANGRY:
+    case Types::MOOD_ANGRY:
       {
         int16_t x1 = (x - w / 2) / FACTOR;
         int16_t y1 = (y - h / 2) / FACTOR;
         int16_t x2 = (x + w / 2) / FACTOR;
         int16_t y2 = y1 + EYE_HEIGHT / 3;
 
-        if (type == EYE_LEFT)  {
+        if (type == Types::EYE_LEFT)  {
           display->fillTriangle(x1, y1, x2, y1, x2, y2, SSD1306_BLACK);
         } else {
           display->fillTriangle(x1, y1, x2, y1, x1, y2, SSD1306_BLACK);
         }
       }
       break;
-    case Animation::MOOD_TIRED:
+    case Types::MOOD_TIRED:
       {
         int16_t h2 = y / (2 * FACTOR);
 
@@ -159,29 +159,29 @@ void Eye::Draw(Adafruit_SSD1306 *display, const Animation::Mood &mood, const Typ
   }
 }
 
-void Eye::GetEyes(const uint16_t &width, const uint16_t &height, const Animation::Mood &mood, const Position &position, Eye (&eyes)[EYES]) {
+void Eye::GetEyes(const uint16_t &width, const uint16_t &height, const Types::Mood &mood, const Types::EyePosition &position, Eye (&eyes)[Types::EYES]) {
   switch (mood) {
-    case Animation::MOOD_NORMAL:
-    case Animation::MOOD_ANGRY:
-    case Animation::MOOD_TIRED:
-      eyes[EYE_LEFT].w = EYE_WIDTH;
-      eyes[EYE_LEFT].h = EYE_HEIGHT;
-      eyes[EYE_RIGHT].w = eyes[EYE_LEFT].w;
-      eyes[EYE_RIGHT].h = eyes[EYE_LEFT].h;
+    case Types::MOOD_NORMAL:
+    case Types::MOOD_ANGRY:
+    case Types::MOOD_TIRED:
+      eyes[Types::EYE_LEFT].w = EYE_WIDTH;
+      eyes[Types::EYE_LEFT].h = EYE_HEIGHT;
+      eyes[Types::EYE_RIGHT].w = eyes[Types::EYE_LEFT].w;
+      eyes[Types::EYE_RIGHT].h = eyes[Types::EYE_LEFT].h;
       break;
-    case Animation::MOOD_CONFUSED:
-      eyes[EYE_LEFT].w = EYE_WIDTH;
-      eyes[EYE_LEFT].h = EYE_HEIGHT_EXTENDED;
-      eyes[EYE_RIGHT].w = eyes[EYE_LEFT].w;
-      eyes[EYE_RIGHT].h = EYE_HEIGHT;
+    case Types::MOOD_CONFUSED:
+      eyes[Types::EYE_LEFT].w = EYE_WIDTH;
+      eyes[Types::EYE_LEFT].h = EYE_HEIGHT_EXTENDED;
+      eyes[Types::EYE_RIGHT].w = eyes[Types::EYE_LEFT].w;
+      eyes[Types::EYE_RIGHT].h = EYE_HEIGHT;
       break;
-    case Animation::MOOD_CLOSED:
-      eyes[EYE_LEFT].w = EYE_WIDTH;
-      eyes[EYE_LEFT].h = 1;
-      eyes[EYE_RIGHT].w = eyes[EYE_LEFT].w;
-      eyes[EYE_RIGHT].h = eyes[EYE_LEFT].h;
+    case Types::MOOD_CLOSED:
+      eyes[Types::EYE_LEFT].w = EYE_WIDTH;
+      eyes[Types::EYE_LEFT].h = 1;
+      eyes[Types::EYE_RIGHT].w = eyes[Types::EYE_LEFT].w;
+      eyes[Types::EYE_RIGHT].h = eyes[Types::EYE_LEFT].h;
       break;
-    case Animation::MOODS:
+    case Types::MOODS:
       break;
   }
 
@@ -191,50 +191,50 @@ void Eye::GetEyes(const uint16_t &width, const uint16_t &height, const Animation
   uint16_t position_y = height / 2;
 
   switch (position) {
-    case POS_CENTER:
-    case POSITIONS:
+    case Types::POS_CENTER:
+    case Types::POSITIONS:
       break;
-    case POS_CENTER_LEFT:
+    case Types::POS_CENTER_LEFT:
       position_x = EYE_BORDER + eyes_max_width / 2;
       break;
-    case POS_CENTER_RIGHT:
+    case Types::POS_CENTER_RIGHT:
       position_x = width - EYE_BORDER - eyes_max_width / 2;
       break;
-    case POS_TOP:
+    case Types::POS_TOP:
       position_y = EYE_BORDER + eyes_max_height / 2;
       break;
-    case POS_TOP_LEFT:
+    case Types::POS_TOP_LEFT:
       position_x = EYE_BORDER + eyes_max_width / 2;
       position_y = EYE_BORDER + eyes_max_height / 2;
       break;
-    case POS_TOP_RIGHT:
+    case Types::POS_TOP_RIGHT:
       position_x = width - EYE_BORDER - eyes_max_width / 2;
       position_y = EYE_BORDER + eyes_max_height / 2;
       break;
-    case POS_BOTTOM:
+    case Types::POS_BOTTOM:
       position_y = height - EYE_BORDER - eyes_max_height / 2;
       break;
-    case POS_BOTTOM_LEFT:
+    case Types::POS_BOTTOM_LEFT:
       position_x = EYE_BORDER + eyes_max_width / 2;
       position_y = height - EYE_BORDER - eyes_max_height / 2;
       break;
-    case POS_BOTTOM_RIGHT:
+    case Types::POS_BOTTOM_RIGHT:
       position_x = width - EYE_BORDER - eyes_max_width / 2;
       position_y = height - EYE_BORDER - eyes_max_height / 2;
       break;
   }
 
-  eyes[EYE_LEFT].x = position_x - (EYE_DISTANCE + eyes[EYE_LEFT].w) / 2;
-  eyes[EYE_LEFT].y = position_y;
-  eyes[EYE_RIGHT].x = position_x + (EYE_DISTANCE + eyes[EYE_RIGHT].w) / 2;
-  eyes[EYE_RIGHT].y = position_y;
+  eyes[Types::EYE_LEFT].x = position_x - (EYE_DISTANCE + eyes[Types::EYE_LEFT].w) / 2;
+  eyes[Types::EYE_LEFT].y = position_y;
+  eyes[Types::EYE_RIGHT].x = position_x + (EYE_DISTANCE + eyes[Types::EYE_RIGHT].w) / 2;
+  eyes[Types::EYE_RIGHT].y = position_y;
 
-  eyes[EYE_LEFT].x *= FACTOR;
-  eyes[EYE_LEFT].y *= FACTOR;
-  eyes[EYE_LEFT].w *= FACTOR;
-  eyes[EYE_LEFT].h *= FACTOR;
-  eyes[EYE_RIGHT].x *= FACTOR;
-  eyes[EYE_RIGHT].y *= FACTOR;
-  eyes[EYE_RIGHT].w *= FACTOR;
-  eyes[EYE_RIGHT].h *= FACTOR;
+  eyes[Types::EYE_LEFT].x *= FACTOR;
+  eyes[Types::EYE_LEFT].y *= FACTOR;
+  eyes[Types::EYE_LEFT].w *= FACTOR;
+  eyes[Types::EYE_LEFT].h *= FACTOR;
+  eyes[Types::EYE_RIGHT].x *= FACTOR;
+  eyes[Types::EYE_RIGHT].y *= FACTOR;
+  eyes[Types::EYE_RIGHT].w *= FACTOR;
+  eyes[Types::EYE_RIGHT].h *= FACTOR;
 }

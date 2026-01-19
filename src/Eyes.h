@@ -4,6 +4,7 @@
 #include <Adafruit_SSD1306.h>
 
 #include "Eye.h"
+#include "Types.h"
 
 class Eyes {
 public:
@@ -19,13 +20,13 @@ public:
   virtual bool AreTransitioned(void) const;
 
   virtual void SetDisplay(Adafruit_SSD1306 *display);
-  virtual void SetPosition(const Eye::Position &position);
+  virtual void SetPosition(const Types::EyePosition &position);
 
   virtual void OnSetup(void);
   virtual void OnLoop(void);
   virtual void OnEnd(void);
 
-  virtual void OnMoodChange(const Animation::Mood &mood);
+  virtual void OnMoodChange(const Types::Mood &mood);
 
 protected:
   virtual void DrawBackground(void);
@@ -33,14 +34,14 @@ protected:
 
   struct Data {
     Adafruit_SSD1306 *display;
-    Eye::Position position;
+    Types::EyePosition position;
 
-    Eye eyes[Eye::EYES];
-    Eye eyes_new[Eye::EYES];
+    Eye eyes[Types::EYES];
+    Eye eyes_new[Types::EYES];
 
     Data(void) :
       display(NULL),
-      position(Eye::POS_CENTER) {
+      position(Types::POS_CENTER) {
     }
   };
 
