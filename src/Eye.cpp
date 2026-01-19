@@ -1,17 +1,17 @@
-#include "Esp32RobotEye.h"
+#include "Eye.h"
 
-const int16_t Esp32RobotEye::EYE_VALUE_DEFAULT = 0;
+const int16_t Eye::EYE_VALUE_DEFAULT = 0;
 
-const uint16_t Esp32RobotEye::EYE_WIDTH = 30;
-const uint16_t Esp32RobotEye::EYE_HEIGHT = 30;
-const uint16_t Esp32RobotEye::EYE_HEIGHT_EXTENDED = 50;
-const uint16_t Esp32RobotEye::EYE_DISTANCE = 16;
-const uint16_t Esp32RobotEye::EYE_CORNER = 10;
-const uint16_t Esp32RobotEye::EYE_BORDER = 10;
+const uint16_t Eye::EYE_WIDTH = 26;
+const uint16_t Eye::EYE_HEIGHT = 30;
+const uint16_t Eye::EYE_HEIGHT_EXTENDED = 50;
+const uint16_t Eye::EYE_DISTANCE = 16;
+const uint16_t Eye::EYE_CORNER = 12;
+const uint16_t Eye::EYE_BORDER = 10;
 
-const int16_t Esp32RobotEye::FACTOR = 100;
+const int16_t Eye::FACTOR = 100;
 
-Esp32RobotEye::Esp32RobotEye(void) :
+Eye::Eye(void) :
   x(EYE_VALUE_DEFAULT),
   y(EYE_VALUE_DEFAULT),
   w(EYE_WIDTH),
@@ -22,7 +22,7 @@ Esp32RobotEye::Esp32RobotEye(void) :
   increment_h(FACTOR) {
 }
 
-Esp32RobotEye::Esp32RobotEye(const Esp32RobotEye &copy) :
+Eye::Eye(const Eye &copy) :
   x(copy.x),
   y(copy.y),
   w(copy.w),
@@ -33,10 +33,10 @@ Esp32RobotEye::Esp32RobotEye(const Esp32RobotEye &copy) :
   increment_h(copy.increment_h) {
 }
 
-Esp32RobotEye::~Esp32RobotEye(void) {
+Eye::~Eye(void) {
 }
 
-Esp32RobotEye &Esp32RobotEye::operator=(const Esp32RobotEye &other) {
+Eye &Eye::operator=(const Eye &other) {
   if (&other != this) {
     x = other.x;
     y = other.y;
@@ -52,7 +52,7 @@ Esp32RobotEye &Esp32RobotEye::operator=(const Esp32RobotEye &other) {
   return (*this);
 }
 
-bool Esp32RobotEye::operator==(const Esp32RobotEye &comp) {
+bool Eye::operator==(const Eye &comp) {
   bool ret = false;
 
   if ((x == comp.x) && (y == comp.y) && (w == comp.w) && (h == comp.h)) {
@@ -62,11 +62,63 @@ bool Esp32RobotEye::operator==(const Esp32RobotEye &comp) {
   return (ret);
 }
 
-bool Esp32RobotEye::operator!=(const Esp32RobotEye &comp) {
+bool Eye::operator!=(const Eye &comp) {
    return (!operator==(comp));
 }
 
-void Esp32RobotEye::Draw(Adafruit_SSD1306 *display, const Eye &eye, const Mood &mood) const {
+
+
+void Eye::Transition(Eye &eye_new) {
+  if (eye_new.x < x) {
+    x -= eye_new.increment_x;
+    if (x < eye_new.x) {
+      x = eye_new.x;
+    }
+  } else if (eye_new.x > x) {
+    x += eye_new.increment_x;
+    if (x > eye_new.x) {
+      x = eye_new.x;
+    }
+  }
+
+  if (eye_new.y < y) {
+    y -= eye_new.increment_y;
+    if (y < eye_new.y) {
+      y = eye_new.y;
+    }
+  } else if (eye_new.y > y) {
+    y += eye_new.increment_y;
+    if (y > eye_new.y) {
+      y = eye_new.y;
+    }
+  }
+
+  if (eye_new.w < w) {
+    w -= eye_new.increment_w;
+    if (w < eye_new.w) {
+      w = eye_new.w;
+    }
+  } else if (eye_new.w > w) {
+    w += eye_new.increment_w;
+    if (w > eye_new.w) {
+      w = eye_new.w;
+    }
+  }
+
+  if (eye_new.h < h) {
+    h -= eye_new.increment_h;
+    if (h < eye_new.h) {
+      h = eye_new.h;
+    }
+  } else if (eye_new.h > h) {
+    h += eye_new.increment_h;
+    if (h > eye_new.h) {
+      h = eye_new.h;
+    }
+  }
+}
+
+void Eye::Draw(Adafruit_SSD1306 *display, const Animation::Mood &mood, const Type &type) const {
   if (display == NULL) {
     return;
   }
@@ -78,26 +130,26 @@ void Esp32RobotEye::Draw(Adafruit_SSD1306 *display, const Eye &eye, const Mood &
   display->fillRoundRect(x1, y1, w1, h1, EYE_CORNER, SSD1306_WHITE);
 
   switch (mood) {
-    case MOOD_NORMAL:
-    case MOOD_CONFUSED:
-    case MOOD_CLOSED:
-    case MOODS:
+    case Animation::MOOD_NORMAL:
+    case Animation::MOOD_CONFUSED:
+    case Animation::MOOD_CLOSED:
+    case Animation::MOODS:
       break;
-    case MOOD_ANGRY:
+    case Animation::MOOD_ANGRY:
       {
         int16_t x1 = (x - w / 2) / FACTOR;
         int16_t y1 = (y - h / 2) / FACTOR;
         int16_t x2 = (x + w / 2) / FACTOR;
         int16_t y2 = y1 + EYE_HEIGHT / 3;
 
-        if (eye == EYE_LEFT)  {
+        if (type == EYE_LEFT)  {
           display->fillTriangle(x1, y1, x2, y1, x2, y2, SSD1306_BLACK);
         } else {
           display->fillTriangle(x1, y1, x2, y1, x1, y2, SSD1306_BLACK);
         }
       }
       break;
-    case MOOD_TIRED:
+    case Animation::MOOD_TIRED:
       {
         int16_t h2 = y / (2 * FACTOR);
 
@@ -107,28 +159,29 @@ void Esp32RobotEye::Draw(Adafruit_SSD1306 *display, const Eye &eye, const Mood &
   }
 }
 
-void Esp32RobotEye::GetEyes(const uint16_t &width, const uint16_t &height, const Mood &mood, const Position &position, Esp32RobotEye (&eyes)[EYES]) {
+void Eye::GetEyes(const uint16_t &width, const uint16_t &height, const Animation::Mood &mood, const Position &position, Eye (&eyes)[EYES]) {
   switch (mood) {
-    case MOOD_NORMAL:
-    case MOOD_ANGRY:
-    case MOOD_TIRED:
-    case MOODS:
+    case Animation::MOOD_NORMAL:
+    case Animation::MOOD_ANGRY:
+    case Animation::MOOD_TIRED:
       eyes[EYE_LEFT].w = EYE_WIDTH;
       eyes[EYE_LEFT].h = EYE_HEIGHT;
       eyes[EYE_RIGHT].w = eyes[EYE_LEFT].w;
       eyes[EYE_RIGHT].h = eyes[EYE_LEFT].h;
       break;
-    case MOOD_CONFUSED:
+    case Animation::MOOD_CONFUSED:
       eyes[EYE_LEFT].w = EYE_WIDTH;
       eyes[EYE_LEFT].h = EYE_HEIGHT_EXTENDED;
       eyes[EYE_RIGHT].w = eyes[EYE_LEFT].w;
       eyes[EYE_RIGHT].h = EYE_HEIGHT;
       break;
-    case MOOD_CLOSED:
+    case Animation::MOOD_CLOSED:
       eyes[EYE_LEFT].w = EYE_WIDTH;
       eyes[EYE_LEFT].h = 1;
       eyes[EYE_RIGHT].w = eyes[EYE_LEFT].w;
       eyes[EYE_RIGHT].h = eyes[EYE_LEFT].h;
+      break;
+    case Animation::MOODS:
       break;
   }
 
@@ -184,54 +237,4 @@ void Esp32RobotEye::GetEyes(const uint16_t &width, const uint16_t &height, const
   eyes[EYE_RIGHT].y *= FACTOR;
   eyes[EYE_RIGHT].w *= FACTOR;
   eyes[EYE_RIGHT].h *= FACTOR;
-}
-
-void Esp32RobotEye::UpdateEye(Esp32RobotEye &eye, Esp32RobotEye &eye_new) {
-  if (eye_new.x < eye.x) {
-    eye.x -= eye_new.increment_x;
-    if (eye.x < eye_new.x) {
-      eye.x = eye_new.x;
-    }
-  } else if (eye_new.x > eye.x) {
-    eye.x += eye_new.increment_x;
-    if (eye.x > eye_new.x) {
-      eye.x = eye_new.x;
-    }
-  }
-
-  if (eye_new.y < eye.y) {
-    eye.y -= eye_new.increment_y;
-    if (eye.y < eye_new.y) {
-      eye.y = eye_new.y;
-    }
-  } else if (eye_new.y > eye.y) {
-    eye.y += eye_new.increment_y;
-    if (eye.y > eye_new.y) {
-      eye.y = eye_new.y;
-    }
-  }
-
-  if (eye_new.w < eye.w) {
-    eye.w -= eye_new.increment_w;
-    if (eye.w < eye_new.w) {
-      eye.w = eye_new.w;
-    }
-  } else if (eye_new.w > eye.w) {
-    eye.w += eye_new.increment_w;
-    if (eye.w > eye_new.w) {
-      eye.w = eye_new.w;
-    }
-  }
-
-  if (eye_new.h < eye.h) {
-    eye.h -= eye_new.increment_h;
-    if (eye.h < eye_new.h) {
-      eye.h = eye_new.h;
-    }
-  } else if (eye_new.h > eye.h) {
-    eye.h += eye_new.increment_h;
-    if (eye.h > eye_new.h) {
-      eye.h = eye_new.h;
-    }
-  }
 }

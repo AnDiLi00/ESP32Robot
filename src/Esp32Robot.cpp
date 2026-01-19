@@ -15,12 +15,10 @@ const int8_t Esp32Robot::WALK_ANKLE_RIGHT_DEFAULT = 125;
 const int8_t Esp32Robot::WALK_ARM_DEFAULT = 45;
 
 Esp32Robot::Esp32Robot(void) :
-  Esp32RobotEyes(),
   data() {
 }
 
 Esp32Robot::Esp32Robot(const Esp32Robot &copy) :
-  Esp32RobotEyes(copy),
   data() {
 
   for (uint8_t i = 0; i < PART_PARTS; i++) {
@@ -36,6 +34,8 @@ Esp32Robot::Esp32Robot(const Esp32Robot &copy) :
   }
 
   data.mode = copy.data.mode;
+
+  data.animation = Animation(copy.data.animation);
 }
 
 Esp32Robot::~Esp32Robot(void) {
@@ -43,8 +43,6 @@ Esp32Robot::~Esp32Robot(void) {
 
 Esp32Robot &Esp32Robot::operator=(const Esp32Robot &other) {
   if (&other != this) {
-    Esp32RobotEyes::operator=(other);
-
     for (uint8_t i = 0; i < PART_PARTS; i++) {
       data.pins[i] = other.data.pins[i];
       data.offsets_drive[i] = other.data.offsets_drive[i];
@@ -58,6 +56,8 @@ Esp32Robot &Esp32Robot::operator=(const Esp32Robot &other) {
     }
 
     data.mode = other.data.mode;
+
+    data.animation = Animation(other.data.animation);
   }
 
   return (*this);
@@ -148,11 +148,11 @@ void Esp32Robot::SetMode(const MovementMode &mode) {
 }
 
 void Esp32Robot::OnSetup(void) {
-  Esp32RobotEyes::OnSetup();
+  data.animation.OnSetup();
 }
 
 void Esp32Robot::OnLoop(void) {
-  Esp32RobotEyes::OnLoop();
+  data.animation.OnLoop();
 }
 
 void Esp32Robot::OnEnd(void) {
@@ -160,12 +160,13 @@ void Esp32Robot::OnEnd(void) {
     data.servos[i].detach();
   }
 
-  Esp32RobotEyes::OnEnd();
+  data.animation.OnEnd();
 }
 
 void Esp32Robot::OnModeChange(const uint8_t &mode) {
   Serial.print("OnModeChange::mode=");
   Serial.println(mode);
+
   if (mode == 1) {
     SetMode(MOVE_WALK);
   } else {

@@ -3,7 +3,9 @@
 
 #include <Adafruit_SSD1306.h>
 
-class Esp32RobotEye {
+#include "Animation.h"
+
+class Eye {
 public:
   static const int16_t EYE_VALUE_DEFAULT;
 
@@ -16,19 +18,10 @@ public:
 
   static const int16_t FACTOR;
 
-  enum Eye {
+  enum Type {
     EYE_LEFT,
     EYE_RIGHT,
     EYES
-  };
-
-  enum Mood {
-    MOOD_NORMAL,
-    MOOD_CONFUSED,
-    MOOD_ANGRY,
-    MOOD_TIRED,
-    MOOD_CLOSED,
-    MOODS
   };
 
   enum Position {
@@ -44,17 +37,17 @@ public:
     POSITIONS
   };
 
-  Esp32RobotEye(void);
-  Esp32RobotEye(const Esp32RobotEye &copy);
-  virtual ~Esp32RobotEye(void);
-  Esp32RobotEye &operator=(const Esp32RobotEye &other);
-  bool operator==(const Esp32RobotEye &comp);
-  bool operator!=(const Esp32RobotEye &comp);
+  Eye(void);
+  Eye(const Eye &copy);
+  virtual ~Eye(void);
+  Eye &operator=(const Eye &other);
+  bool operator==(const Eye &comp);
+  bool operator!=(const Eye &comp);
 
-  virtual void Draw(Adafruit_SSD1306 *display, const Eye &eye, const Mood &mood) const;
+  virtual void Transition(Eye &eye_new);
+  virtual void Draw(Adafruit_SSD1306 *display, const Animation::Mood &mood, const Type &type) const;
 
-  static void GetEyes(const uint16_t &width, const uint16_t &height, const Mood &mood, const Position &position, Esp32RobotEye (&eyes)[EYES]);
-  static void UpdateEye(Esp32RobotEye &eye, Esp32RobotEye &eye_new);
+  static void GetEyes(const uint16_t &width, const uint16_t &height, const Animation::Mood &mood, const Position &position, Eye (&eyes)[EYES]);
 
   int16_t x;
   int16_t y;

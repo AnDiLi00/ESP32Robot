@@ -6,9 +6,9 @@
 #include <BLEDevice.h>
 #include <ESP32Servo.h>
 
-#include "Esp32RobotEyes.h"
+#include "Animation.h"
 
-class Esp32Robot : public Esp32RobotEyes {
+class Esp32Robot {
 public:
   static const int8_t PIN_NOPIN;
   static const int8_t OFFSET_DEFAULT;
@@ -77,8 +77,11 @@ protected:
 
     MovementMode mode;
 
+    Animation animation;
+
     Data(void) :
-      mode(MOVE_UNDEFINED) {
+      mode(MOVE_UNDEFINED),
+      animation(Animation()) {
 
       for (uint8_t i = 0; i < PART_PARTS; i++) {
         pins[i] = PIN_NOPIN;
