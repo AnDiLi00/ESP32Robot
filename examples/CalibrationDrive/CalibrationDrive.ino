@@ -45,13 +45,13 @@ void setup() {
   RemoteXYEngine.addVariableEvent(RemoteXY.offset_right, RemoteXY_offset_right_event);
 
   // Esp32Robot Setup
-  Esp32Robot.SetPin(Esp32Robot::PART_LEFT_DRIVE, 5);
-  Esp32Robot.SetPin(Esp32Robot::PART_RIGHT_DRIVE, 23);
-  Esp32Robot.SetPin(Esp32Robot::PART_LEFT_ANKLE, 19);
-  Esp32Robot.SetPin(Esp32Robot::PART_RIGHT_ANKLE, 18);
-  Esp32Robot.SetOffset(Esp32Robot::PART_LEFT_ANKLE, Esp32Robot::MOVE_WALK, 0);
-  Esp32Robot.SetOffset(Esp32Robot::PART_RIGHT_ANKLE, Esp32Robot::MOVE_WALK, 2);
-  Esp32Robot.SetMode(Esp32Robot::MOVE_DRIVE);
+  Esp32Robot.SetPin(Types::PART_LEFT_DRIVE, 5);
+  Esp32Robot.SetPin(Types::PART_RIGHT_DRIVE, 23);
+  Esp32Robot.SetPin(Types::PART_LEFT_ANKLE, 19);
+  Esp32Robot.SetPin(Types::PART_RIGHT_ANKLE, 18);
+  Esp32Robot.SetOffset(Types::PART_LEFT_ANKLE, Types::MOVE_WALK, 0);
+  Esp32Robot.SetOffset(Types::PART_RIGHT_ANKLE, Types::MOVE_WALK, 2);
+  Esp32Robot.SetMode(Types::MOVE_DRIVE);
 
   Esp32Robot.OnSetup();
 }

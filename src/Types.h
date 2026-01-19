@@ -43,6 +43,22 @@ public:
     SUB_OPENING,
   };
 
+  enum MovementMode {
+    MOVE_UNDEFINED,
+    MOVE_DRIVE,
+    MOVE_WALK
+  };
+
+  enum BodyParts {
+    PART_LEFT_DRIVE,
+    PART_LEFT_ANKLE,
+    PART_LEFT_ARM,
+    PART_RIGHT_DRIVE,
+    PART_RIGHT_ANKLE,
+    PART_RIGHT_ARM,
+    PART_PARTS
+  };
+
 private:
   Types(void);
   virtual ~Types(void);

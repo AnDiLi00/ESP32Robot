@@ -7,6 +7,7 @@
 #include <ESP32Servo.h>
 
 #include "Animation.h"
+#include "Types.h"
 
 class Esp32Robot {
 public:
@@ -24,38 +25,22 @@ public:
   static const int8_t WALK_ANKLE_RIGHT_DEFAULT;
   static const int8_t WALK_ARM_DEFAULT;
 
-  enum MovementMode {
-    MOVE_UNDEFINED,
-    MOVE_DRIVE,
-    MOVE_WALK
-  };
-
-  enum BodyParts {
-    PART_LEFT_DRIVE,
-    PART_LEFT_ANKLE,
-    PART_LEFT_ARM,
-    PART_RIGHT_DRIVE,
-    PART_RIGHT_ANKLE,
-    PART_RIGHT_ARM,
-    PART_PARTS
-  };
-
   Esp32Robot(void);
   Esp32Robot(const Esp32Robot &copy);
   virtual ~Esp32Robot(void);
   Esp32Robot &operator=(const Esp32Robot &other);
 
-  virtual int8_t GetPin(const BodyParts &part) const;
-  virtual int8_t GetOffset(const BodyParts &part, const MovementMode &mode) const;
+  virtual int8_t GetPin(const Types::BodyParts &part) const;
+  virtual int8_t GetOffset(const Types::BodyParts &part, const Types::MovementMode &mode) const;
 
-  virtual void SetPin(const BodyParts &part, const int8_t &pin);
-  virtual void SetOffset(const BodyParts &part, const MovementMode &mode, const int8_t &offset);
+  virtual void SetPin(const Types::BodyParts &part, const int8_t &pin);
+  virtual void SetOffset(const Types::BodyParts &part, const Types::MovementMode &mode, const int8_t &offset);
 
-  virtual void Update(const BodyParts &part);
-  virtual void Move(const BodyParts &part, const int8_t &position);
+  virtual void Update(const Types::BodyParts &part);
+  virtual void Move(const Types::BodyParts &part, const int8_t &position);
 
-  virtual MovementMode GetMode(void) const;
-  virtual void SetMode(const MovementMode &mode);
+  virtual Types::MovementMode GetMode(void) const;
+  virtual void SetMode(const Types::MovementMode &mode);
 
   virtual void OnSetup(void);
   virtual void OnLoop(void);
@@ -69,21 +54,21 @@ public:
 
 protected:
   struct Data {
-    int8_t pins[PART_PARTS];
-    int8_t offsets_drive[PART_PARTS];
-    int8_t offsets_walk[PART_PARTS];
-    int8_t positions[PART_PARTS];
-    Servo servos[PART_PARTS];
+    int8_t pins[Types::PART_PARTS];
+    int8_t offsets_drive[Types::PART_PARTS];
+    int8_t offsets_walk[Types::PART_PARTS];
+    int8_t positions[Types::PART_PARTS];
+    Servo servos[Types::PART_PARTS];
 
-    MovementMode mode;
+    Types::MovementMode mode;
 
     Animation animation;
 
     Data(void) :
-      mode(MOVE_UNDEFINED),
+      mode(Types::MOVE_UNDEFINED),
       animation(Animation()) {
 
-      for (uint8_t i = 0; i < PART_PARTS; i++) {
+      for (uint8_t i = 0; i < Types::PART_PARTS; i++) {
         pins[i] = PIN_NOPIN;
         offsets_drive[i] = OFFSET_DEFAULT;
         offsets_walk[i] = OFFSET_DEFAULT;

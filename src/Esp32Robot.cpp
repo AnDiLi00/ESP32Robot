@@ -21,7 +21,7 @@ Esp32Robot::Esp32Robot(void) :
 Esp32Robot::Esp32Robot(const Esp32Robot &copy) :
   data() {
 
-  for (uint8_t i = 0; i < PART_PARTS; i++) {
+  for (uint8_t i = 0; i < Types::PART_PARTS; i++) {
     data.pins[i] = copy.data.pins[i];
     data.offsets_drive[i] = copy.data.offsets_drive[i];
     data.offsets_walk[i] = copy.data.offsets_walk[i];
@@ -43,7 +43,7 @@ Esp32Robot::~Esp32Robot(void) {
 
 Esp32Robot &Esp32Robot::operator=(const Esp32Robot &other) {
   if (&other != this) {
-    for (uint8_t i = 0; i < PART_PARTS; i++) {
+    for (uint8_t i = 0; i < Types::PART_PARTS; i++) {
       data.pins[i] = other.data.pins[i];
       data.offsets_drive[i] = other.data.offsets_drive[i];
       data.offsets_walk[i] = other.data.offsets_walk[i];
@@ -63,20 +63,20 @@ Esp32Robot &Esp32Robot::operator=(const Esp32Robot &other) {
   return (*this);
 }
 
-int8_t Esp32Robot::GetPin(const BodyParts &part) const {
+int8_t Esp32Robot::GetPin(const Types::BodyParts &part) const {
   return (data.pins[part]);
 }
 
-int8_t Esp32Robot::GetOffset(const BodyParts &part, const MovementMode &mode) const {
+int8_t Esp32Robot::GetOffset(const Types::BodyParts &part, const Types::MovementMode &mode) const {
   int8_t ret = OFFSET_DEFAULT;
 
   switch (mode) {
-    case MOVE_UNDEFINED:
+    case Types::MOVE_UNDEFINED:
       break;
-    case MOVE_DRIVE:
+    case Types::MOVE_DRIVE:
       ret = data.offsets_drive[part];
       break;
-    case MOVE_WALK:
+    case Types::MOVE_WALK:
       ret = data.offsets_walk[part];
       break;
   }
@@ -84,7 +84,7 @@ int8_t Esp32Robot::GetOffset(const BodyParts &part, const MovementMode &mode) co
   return (ret);
 }
 
-void Esp32Robot::SetPin(const BodyParts &part, const int8_t &pin) {
+void Esp32Robot::SetPin(const Types::BodyParts &part, const int8_t &pin) {
   if (pin != data.pins[part]) {
     data.pins[part] = pin;
 
@@ -95,53 +95,53 @@ void Esp32Robot::SetPin(const BodyParts &part, const int8_t &pin) {
   }
 }
 
-void Esp32Robot::SetOffset(const BodyParts &part, const MovementMode &mode, const int8_t &offset) {
+void Esp32Robot::SetOffset(const Types::BodyParts &part, const Types::MovementMode &mode, const int8_t &offset) {
   switch (mode) {
-    case MOVE_UNDEFINED:
+    case Types::MOVE_UNDEFINED:
       break;
-    case MOVE_DRIVE:
+    case Types::MOVE_DRIVE:
       data.offsets_drive[part] = offset;
       break;
-    case MOVE_WALK:
+    case Types::MOVE_WALK:
       data.offsets_walk[part] = offset;
       break;
   }
 }
 
-void Esp32Robot::Update(const BodyParts &part) {
+void Esp32Robot::Update(const Types::BodyParts &part) {
   Move(part, data.positions[part]);
 }
 
-void Esp32Robot::Move(const BodyParts &part, const int8_t &position) {
+void Esp32Robot::Move(const Types::BodyParts &part, const int8_t &position) {
   data.positions[part] = position;
   data.servos[part].write(position + GetOffset(part, data.mode));
 }
 
-Esp32Robot::MovementMode Esp32Robot::GetMode(void) const {
+Types::MovementMode Esp32Robot::GetMode(void) const {
   return (data.mode);
 }
 
-void Esp32Robot::SetMode(const MovementMode &mode) {
-  if ((mode != data.mode) && (mode != MOVE_UNDEFINED)) {
+void Esp32Robot::SetMode(const Types::MovementMode &mode) {
+  if ((mode != data.mode) && (mode != Types::MOVE_UNDEFINED)) {
     data.mode = mode;
 
     switch (data.mode) {
-      case MOVE_UNDEFINED:
+      case Types::MOVE_UNDEFINED:
         Serial.println("mode=undefined");
         break;
       case MOVE_DRIVE:
         Serial.println("mode=drive");
-        Move(PART_LEFT_DRIVE, DRIVE_DRIVE_DEFAULT);
-        Move(PART_RIGHT_DRIVE, DRIVE_DRIVE_DEFAULT);
-        Move(PART_LEFT_ANKLE, DRIVE_ANKLE_LEFT_DEFAULT);
-        Move(PART_RIGHT_ANKLE, DRIVE_ANKLE_RIGHT_DEFAULT);
+        Move(Types::PART_LEFT_DRIVE, DRIVE_DRIVE_DEFAULT);
+        Move(Types::PART_RIGHT_DRIVE, DRIVE_DRIVE_DEFAULT);
+        Move(Types::PART_LEFT_ANKLE, DRIVE_ANKLE_LEFT_DEFAULT);
+        Move(Types::PART_RIGHT_ANKLE, DRIVE_ANKLE_RIGHT_DEFAULT);
         break;
       case MOVE_WALK:
         Serial.println("mode=walk");
-        Move(PART_LEFT_DRIVE, WALK_DRIVE_DEFAULT);
-        Move(PART_RIGHT_DRIVE, WALK_DRIVE_DEFAULT);
-        Move(PART_LEFT_ANKLE, WALK_ANKLE_LEFT_DEFAULT);
-        Move(PART_RIGHT_ANKLE, WALK_ANKLE_RIGHT_DEFAULT);
+        Move(Types::PART_LEFT_DRIVE, WALK_DRIVE_DEFAULT);
+        Move(Types::PART_RIGHT_DRIVE, WALK_DRIVE_DEFAULT);
+        Move(Types::PART_LEFT_ANKLE, WALK_ANKLE_LEFT_DEFAULT);
+        Move(Types::PART_RIGHT_ANKLE, WALK_ANKLE_RIGHT_DEFAULT);
         break;
     }
   }
@@ -156,7 +156,7 @@ void Esp32Robot::OnLoop(void) {
 }
 
 void Esp32Robot::OnEnd(void) {
-  for (int8_t i = 0; i < PART_PARTS; i++) {
+  for (int8_t i = 0; i < Types::PART_PARTS; i++) {
     data.servos[i].detach();
   }
 
@@ -168,9 +168,9 @@ void Esp32Robot::OnModeChange(const uint8_t &mode) {
   Serial.println(mode);
 
   if (mode == 1) {
-    SetMode(MOVE_WALK);
+    SetMode(Types::MOVE_WALK);
   } else {
-    SetMode(MOVE_DRIVE);
+    SetMode(Types::MOVE_DRIVE);
   }
 }
 
@@ -185,11 +185,11 @@ void Esp32Robot::OnSteeringChange(const int8_t &steering) {
 }
 
 void Esp32Robot::OnOffsetLeftChange(const int8_t &left_offset) {
-  SetOffset(PART_LEFT_ANKLE, data.mode, left_offset);
-  Update(PART_LEFT_ANKLE);
+  SetOffset(Types::PART_LEFT_ANKLE, data.mode, left_offset);
+  Update(Types::PART_LEFT_ANKLE);
 }
 
 void Esp32Robot::OnOffsetRightChange(const int8_t &right_offset) {
-  SetOffset(PART_RIGHT_ANKLE, data.mode, right_offset);
-  Update(PART_RIGHT_ANKLE);
+  SetOffset(Types::PART_RIGHT_ANKLE, data.mode, right_offset);
+  Update(Types::PART_RIGHT_ANKLE);
 }
