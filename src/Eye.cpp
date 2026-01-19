@@ -118,7 +118,7 @@ void Eye::Transition(Eye &eye_new) {
   }
 }
 
-void Eye::Draw(Adafruit_SSD1306 *display, const Types::Mood &mood, const Type &type) const {
+void Eye::Draw(Adafruit_SSD1306 *display, const Types::Mood &mood, const Types::EyeType &type) const {
   if (display == NULL) {
     return;
   }

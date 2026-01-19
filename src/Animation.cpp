@@ -76,7 +76,7 @@ void Animation::SetMood(const Types::Mood &mood) {
 }
 
 void Animation::OnSetup(void) {
-  data.eyes.OnSetup();
+  data.eyes.OnSetup(data.mood);
 }
 
 void Animation::OnLoop(void) {
@@ -88,7 +88,7 @@ void Animation::OnLoop(void) {
 
     DoUpdate(now);
 
-    data.eyes.OnLoop();
+    data.eyes.OnLoop(data.mood);
   }
 }
 
@@ -107,7 +107,7 @@ void Animation::DoUpdate(const unsigned long &now) {
           data.animation = Types::ANIM_BLINK;
           data.animation_sub = Types::SUB_CLOSING;
 
-          data.eyes.MoodChange(Types::MOOD_CLOSED);
+          data.eyes.OnMoodChange(Types::MOOD_CLOSED);
         } else {
           // switch mood
           data.last_idle = now;

@@ -129,14 +129,14 @@ void Esp32Robot::SetMode(const Types::MovementMode &mode) {
       case Types::MOVE_UNDEFINED:
         Serial.println("mode=undefined");
         break;
-      case MOVE_DRIVE:
+      case Types::MOVE_DRIVE:
         Serial.println("mode=drive");
         Move(Types::PART_LEFT_DRIVE, DRIVE_DRIVE_DEFAULT);
         Move(Types::PART_RIGHT_DRIVE, DRIVE_DRIVE_DEFAULT);
         Move(Types::PART_LEFT_ANKLE, DRIVE_ANKLE_LEFT_DEFAULT);
         Move(Types::PART_RIGHT_ANKLE, DRIVE_ANKLE_RIGHT_DEFAULT);
         break;
-      case MOVE_WALK:
+      case Types::MOVE_WALK:
         Serial.println("mode=walk");
         Move(Types::PART_LEFT_DRIVE, WALK_DRIVE_DEFAULT);
         Move(Types::PART_RIGHT_DRIVE, WALK_DRIVE_DEFAULT);
