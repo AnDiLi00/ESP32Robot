@@ -4,8 +4,8 @@ const unsigned long Animation::TIME_DEFAULT = 0;
 const unsigned long Animation::TIME_UPDATE = 20;
 const unsigned long Animation::TIME_IDLE_MIN = 4200;
 const unsigned long Animation::TIME_IDLE_VARIANCE = 1600;
-const unsigned long Animation::TIME_BLINK_MIN = 300;
-const unsigned long Animation::TIME_TRANSITION_MIN = 300;
+const unsigned long Animation::TIME_BLINK_MIN = 100;
+const unsigned long Animation::TIME_TRANSITION_MIN = 100;
 
 Animation::Animation(void) :
   data() {
