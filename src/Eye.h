@@ -1,5 +1,5 @@
-#ifndef __esp32roboteye_h__
-#define __esp32roboteye_h__
+#ifndef __eye_h__
+#define __eye_h__
 
 #include <Adafruit_SSD1306.h>
 

@@ -17,20 +17,20 @@ public:
   virtual ~Eyes(void);
   Eyes &operator=(const Eyes &other);
 
-  virtual bool AreTransitioned(void) const;
+  virtual bool AreTransitioned(void);
 
   virtual void SetDisplay(Adafruit_SSD1306 *display);
   virtual void SetPosition(const Types::EyePosition &position);
 
-  virtual void OnSetup(void);
-  virtual void OnLoop(void);
+  virtual void OnSetup(const Types::Mood &mood);
+  virtual void OnLoop(const Types::Mood &mood);
   virtual void OnEnd(void);
 
   virtual void OnMoodChange(const Types::Mood &mood);
 
 protected:
   virtual void DrawBackground(void);
-  virtual void DrawEyes(void);
+  virtual void DrawEyes(const Types::Mood &mood);
 
   struct Data {
     Adafruit_SSD1306 *display;

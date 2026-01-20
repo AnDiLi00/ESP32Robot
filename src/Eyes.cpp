@@ -14,7 +14,7 @@ Eyes::Eyes(const Eyes &copy) :
   data.display = copy.data.display;
   data.position = copy.data.position;
 
-  for (uint8_t i = 0; i < Eye::EYES; i++) {
+  for (uint8_t i = 0; i < Types::EYES; i++) {
     data.eyes[i] = copy.data.eyes[i];
     data.eyes_new[i] = copy.data.eyes_new[i];
   }
@@ -28,7 +28,7 @@ Eyes &Eyes::operator=(const Eyes &other) {
     data.display = other.data.display;
     data.position = other.data.position;
 
-    for (uint8_t i = 0; i < Eye::EYES; i++) {
+    for (uint8_t i = 0; i < Types::EYES; i++) {
       data.eyes[i] = other.data.eyes[i];
       data.eyes_new[i] = other.data.eyes_new[i];
     }
@@ -37,10 +37,10 @@ Eyes &Eyes::operator=(const Eyes &other) {
   return (*this);
 }
 
-bool Eyes::AreTransitioned(void) const {
+bool Eyes::AreTransitioned(void) {
   bool ret = true;
 
-  for (uint8_t i = 0; i < Eye::EYES; i++) {
+  for (uint8_t i = 0; i < Types::EYES; i++) {
     if (data.eyes[i] != data.eyes_new[i]) {
       ret = false;
       break;
@@ -54,46 +54,46 @@ void Eyes::SetDisplay(Adafruit_SSD1306 *display) {
   data.display = display;
 }
 
-void Eyes::SetPosition(const Eye::Position &position) {
+void Eyes::SetPosition(const Types::EyePosition &position) {
   if (position != data.position) {
     data.position = position;
 
     switch (data.position) {
-      case Eye::POS_CENTER:
+      case Types::POS_CENTER:
         Serial.println("position=center");
         break;
-      case Eye::POS_CENTER_LEFT:
+      case Types::POS_CENTER_LEFT:
         Serial.println("position=center left");
         break;
-      case Eye::POS_CENTER_RIGHT:
+      case Types::POS_CENTER_RIGHT:
         Serial.println("position=center right");
         break;
-      case Eye::POS_TOP:
+      case Types::POS_TOP:
         Serial.println("position=top center");
         break;
-      case Eye::POS_TOP_LEFT:
+      case Types::POS_TOP_LEFT:
         Serial.println("position=top left");
         break;
-      case Eye::POS_TOP_RIGHT:
+      case Types::POS_TOP_RIGHT:
         Serial.println("position=top right");
         break;
-      case Eye::POS_BOTTOM:
+      case Types::POS_BOTTOM:
         Serial.println("position=bottom center");
         break;
-      case Eye::POS_BOTTOM_LEFT:
+      case Types::POS_BOTTOM_LEFT:
         Serial.println("position=bottom left");
         break;
-      case Eye::POS_BOTTOM_RIGHT:
+      case Types::POS_BOTTOM_RIGHT:
         Serial.println("position=bottom right");
         break;
-      case Eye::POSITIONS:
+      case Types::POSITIONS:
         Serial.println("position=positions?!");
         break;
     }
   }
 }
 
-void Eyes::OnSetup(void) {
+void Eyes::OnSetup(const Types::Mood &mood) {
   if (data.display == NULL) {
     return;
   }
@@ -102,13 +102,13 @@ void Eyes::OnSetup(void) {
   data.display->clearDisplay();
   data.display->display();
 
-  Eye::GetEyes(data.display->width(), data.display->height(), data.mood, data.position, data.eyes);
-  for (uint8_t i = 0; i < Eye::EYES; i++) {
+  Eye::GetEyes(data.display->width(), data.display->height(), mood, data.position, data.eyes);
+  for (uint8_t i = 0; i < Types::EYES; i++) {
     data.eyes_new[i] = data.eyes[i];
   }
 }
 
-void Eyes::OnLoop(void) {
+void Eyes::OnLoop(const Types::Mood &mood) {
   if (data.display == NULL) {
     return;
   }
@@ -116,7 +116,7 @@ void Eyes::OnLoop(void) {
   data.display->clearDisplay();
 
   DrawBackground();
-  DrawEyes();
+  DrawEyes(mood);
 
   data.display->display();
 }
@@ -124,7 +124,7 @@ void Eyes::OnLoop(void) {
 void Eyes::OnEnd(void) {
 }
 
-void Eyes::OnMoodChange(const Animation::Mood &mood) {
+void Eyes::OnMoodChange(const Types::Mood &mood) {
   if (data.display == NULL) {
     return;
   }
@@ -136,10 +136,10 @@ void Eyes::DrawBackground(void) {
   data.display->fillScreen(SSD1306_BLACK);
 }
 
-void Eyes::DrawEyes(void) {
-  for (uint8_t i = 0; i < Eye::EYES; i++) {
+void Eyes::DrawEyes(const Types::Mood &mood) {
+  for (uint8_t i = 0; i < Types::EYES; i++) {
     data.eyes[i].Transition(data.eyes_new[i]);
 
-    data.eyes[i].Draw(data.display, (Eye::Type)i, data.mood);
+    data.eyes[i].Draw(data.display, mood, (Types::EyeType)i);
   }
 }
