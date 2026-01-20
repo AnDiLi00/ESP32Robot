@@ -175,7 +175,7 @@ unsigned long Animation::GetAnimationSteps(void) {
           break;
         case Types::SUB_CLOSING:
         case Types::SUB_OPENING:
-          steps = TIME_BINK_MIN / TIME_UPDATE;
+          steps = TIME_BLINK_MIN / TIME_UPDATE;
           break;
       }
       break;
