@@ -3,9 +3,9 @@
 const int16_t Eye::EYE_VALUE_DEFAULT = 0;
 
 const uint16_t Eye::EYE_WIDTH = 26;
-const uint16_t Eye::EYE_HEIGHT = 30;
-const uint16_t Eye::EYE_HEIGHT_EXTENDED = 50;
-const uint16_t Eye::EYE_DISTANCE = 16;
+const uint16_t Eye::EYE_HEIGHT = 34;
+const uint16_t Eye::EYE_HEIGHT_EXTENDED = 44;
+const uint16_t Eye::EYE_DISTANCE = 18;
 const uint16_t Eye::EYE_CORNER = 12;
 const uint16_t Eye::EYE_BORDER = 10;
 
