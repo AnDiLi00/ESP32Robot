@@ -155,6 +155,12 @@ void Animation::DoUpdate(const unsigned long &now) {
           }
 
           data.eyes.OnMoodChange(data.mood, data.mood_sub, GetAnimationSteps());
+
+          if (data.mood != Types::MOOD_CLOSED) {
+            data.anim2++;
+          } else {
+            data.anim1++;
+          }
         }
         data.anim1++;
       }

@@ -164,7 +164,7 @@ void Eye::Draw(Adafruit_SSD1306 *display, const Types::Mood &mood, const Types::
       break;
     case Types::MSUB_HAPPY:
       {
-        if (mood != Types::MOOD_TIRED) {
+        if (mood != Types::MOOD_CLOSED) {
           int16_t r1 = w1 / 2;
           display->fillCircle(x1 + r1, y1 + h1, r1, SSD1306_BLACK);
         }
