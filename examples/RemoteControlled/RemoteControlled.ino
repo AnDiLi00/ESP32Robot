@@ -1,4 +1,5 @@
 #include <Adafruit_SSD1306.h>
+#include <BLEDevice.h>
 #include <Esp32Robot.h>
 #include <RemoteXY.h>
 
