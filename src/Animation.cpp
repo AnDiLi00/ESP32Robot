@@ -15,6 +15,7 @@ Animation::Animation(const Animation &copy) :
   data() {
 
   data.mood = copy.data.mood;
+  data.mood_sub = copy.data.mood_sub;
 
   data.animation = copy.data.animation;
   data.animation_sub = copy.data.animation_sub;
@@ -34,6 +35,7 @@ Animation::~Animation(void) {
 Animation &Animation::operator=(const Animation &other) {
   if (&other != this) {
     data.mood = other.data.mood;
+    data.mood_sub = other.data.mood_sub;
 
     data.animation = other.data.animation;
     data.animation_sub = other.data.animation_sub;
@@ -81,6 +83,24 @@ void Animation::SetMood(const Types::Mood &mood) {
   }
 }
 
+void Animation::SetSubMood(const Types::MoodSub &mood_sub) {
+  if (mood_sub != data.mood_sub) {
+    data.mood_sub = mood_sub;
+
+    switch (data.mood_sub) {
+      case Types::MSUB_NORMAL:
+        Serial.println("submood=normal");
+        break;
+      case Types::MSUB_HAPPY:
+        Serial.println("submood=happy");
+        break;
+      case Types::SUBMOODS:
+        Serial.println("submood=submoods?!");
+        break;
+    }
+  }
+}
+
 void Animation::OnSetup(void) {
   data.eyes.OnSetup(data.mood);
 }
@@ -119,8 +139,13 @@ void Animation::DoUpdate(const unsigned long &now) {
           data.last_idle = now;
           data.duration_idle = GetIdleDuration();
 
-          int8_t new_mood = ((int8_t)data.mood + 1) % (int8_t)Types::MOODS;
-          SetMood((Types::Mood)new_mood);
+          if (data.anim % 3 == 0) {
+            int8_t new_mood = ((int8_t)data.mood + 1) % (int8_t)Types::MOODS;
+            SetMood((Types::Mood)new_mood);
+          } else {
+            int8_t new_submood = ((int8_t)data.submood + 1) % (int8_t)Types::SUBMOODS;
+            SetSubMood((Types::MoodSub)new_submood);
+          }
 
           data.eyes.OnMoodChange(data.mood, GetAnimationSteps());
         }

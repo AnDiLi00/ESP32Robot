@@ -93,7 +93,7 @@ void Eyes::SetPosition(const Types::EyePosition &position) {
   }
 }
 
-void Eyes::OnSetup(const Types::Mood &mood) {
+void Eyes::OnSetup(const Types::Mood &mood, const Types::MoodSub &submood) {
   if (data.display == NULL) {
     return;
   }
@@ -102,13 +102,13 @@ void Eyes::OnSetup(const Types::Mood &mood) {
   data.display->clearDisplay();
   data.display->display();
 
-  Eye::GetEyes(data.display->width(), data.display->height(), mood, data.position, data.eyes);
+  Eye::GetEyes(data.display->width(), data.display->height(), mood, submood, data.position, data.eyes);
   for (uint8_t i = 0; i < Types::EYES; i++) {
     data.eyes_new[i] = data.eyes[i];
   }
 }
 
-void Eyes::OnLoop(const Types::Mood &mood) {
+void Eyes::OnLoop(const Types::Mood &mood, const Types::MoodSub &submood) {
   if (data.display == NULL) {
     return;
   }
@@ -116,7 +116,7 @@ void Eyes::OnLoop(const Types::Mood &mood) {
   data.display->clearDisplay();
 
   DrawBackground();
-  DrawEyes(mood);
+  DrawEyes(mood, submood);
 
   data.display->display();
 }
@@ -124,12 +124,12 @@ void Eyes::OnLoop(const Types::Mood &mood) {
 void Eyes::OnEnd(void) {
 }
 
-void Eyes::OnMoodChange(const Types::Mood &mood, const unsigned long &steps) {
+void Eyes::OnMoodChange(const Types::Mood &mood, const Types::MoodSub &submood, const unsigned long &steps) {
   if (data.display == NULL) {
     return;
   }
 
-  Eye::GetEyes(data.display->width(), data.display->height(), mood, data.position, data.eyes_new);
+  Eye::GetEyes(data.display->width(), data.display->height(), mood, submood, data.position, data.eyes_new);
   Eye::UpdateIncrement(steps, data.eyes, data.eyes_new);
 }
 
@@ -137,10 +137,10 @@ void Eyes::DrawBackground(void) {
   data.display->fillScreen(SSD1306_BLACK);
 }
 
-void Eyes::DrawEyes(const Types::Mood &mood) {
+void Eyes::DrawEyes(const Types::Mood &mood, const Types::MoodSub &submood) {
   for (uint8_t i = 0; i < Types::EYES; i++) {
     data.eyes[i].Transition(data.eyes_new[i]);
 
-    data.eyes[i].Draw(data.display, mood, (Types::EyeType)i);
+    data.eyes[i].Draw(data.display, mood, submood, (Types::EyeType)i);
   }
 }

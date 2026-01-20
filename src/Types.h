@@ -31,6 +31,12 @@ public:
     MOODS
   };
 
+  enum MoodSub {
+    MSUB_NORMAL,
+    MSUB_HAPPY,
+    SUBMOODS
+  };
+
   enum AnimType {
     ANIM_IDLE,
     ANIM_BLINK,

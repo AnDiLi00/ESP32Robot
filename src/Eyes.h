@@ -22,15 +22,15 @@ public:
   virtual void SetDisplay(Adafruit_SSD1306 *display);
   virtual void SetPosition(const Types::EyePosition &position);
 
-  virtual void OnSetup(const Types::Mood &mood);
-  virtual void OnLoop(const Types::Mood &mood);
+  virtual void OnSetup(const Types::Mood &mood, const Types::MoodSub &submood);
+  virtual void OnLoop(const Types::Mood &mood, const Types::MoodSub &submood);
   virtual void OnEnd(void);
 
-  virtual void OnMoodChange(const Types::Mood &mood, const unsigned long &steps);
+  virtual void OnMoodChange(const Types::Mood &mood, const Types::MoodSub &submood, const unsigned long &steps);
 
 protected:
   virtual void DrawBackground(void);
-  virtual void DrawEyes(const Types::Mood &mood);
+  virtual void DrawEyes(const Types::Mood &mood, const Types::MoodSub &submood);
 
   struct Data {
     Adafruit_SSD1306 *display;

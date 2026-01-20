@@ -26,9 +26,9 @@ public:
   bool operator!=(const Eye &comp);
 
   virtual void Transition(Eye &eye_new);
-  virtual void Draw(Adafruit_SSD1306 *display, const Types::Mood &mood, const Types::EyeType &type) const;
+  virtual void Draw(Adafruit_SSD1306 *display, const Types::Mood &mood, const Types::MoodSub &submood, const Types::EyeType &type) const;
 
-  static void GetEyes(const uint16_t &width, const uint16_t &height, const Types::Mood &mood, const Types::EyePosition &position, Eye (&eyes)[Types::EYES]);
+  static void GetEyes(const uint16_t &width, const uint16_t &height, const Types::Mood &mood, const Types::MoodSub &submood, const Types::EyePosition &position, Eye (&eyes)[Types::EYES]);
   static void UpdateIncrement(const int16_t &steps, Eye (&eyes_from)[Types::EYES], Eye (&eyes_to)[Types::EYES]);
 
   int16_t x;

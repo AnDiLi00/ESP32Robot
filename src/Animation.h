@@ -20,6 +20,7 @@ public:
 
   virtual void SetDisplay(Adafruit_SSD1306 *display);
   virtual void SetMood(const Types::Mood &mood);
+  virtual void SetSubMood(const Types::MoodSub &mood_sub);
 
   virtual void OnSetup(void);
   virtual void OnLoop(void);
@@ -33,6 +34,7 @@ protected:
 
   struct Data {
     Types::Mood mood;
+    Types::MoodSub mood_sub;
 
     Types::AnimType animation;
     Types::AnimSubType animation_sub;
@@ -47,6 +49,7 @@ protected:
 
     Data(void) :
       mood(Types::MOOD_NORMAL),
+      mood_sub(Types::MSUB_NORMAL),
       animation(Types::ANIM_IDLE),
       animation_sub(Types::SUB_NONE),
       last_update(TIME_DEFAULT),

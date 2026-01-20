@@ -118,7 +118,7 @@ void Eye::Transition(Eye &eye_new) {
   }
 }
 
-void Eye::Draw(Adafruit_SSD1306 *display, const Types::Mood &mood, const Types::EyeType &type) const {
+void Eye::Draw(Adafruit_SSD1306 *display, const Types::Mood &mood, const Types::MoodSub &submood, const Types::EyeType &type) const {
   if (display == NULL) {
     return;
   }
@@ -157,9 +157,29 @@ void Eye::Draw(Adafruit_SSD1306 *display, const Types::Mood &mood, const Types::
       }
       break;
   }
+
+  switch (submood) {
+    case Types::MSUB_NORMAL:
+    case Types::SUBMOODS:
+      break;
+    case Types::MSUB_HAPPY:
+      {
+        int16_t x1 = (x - w / 2) / FACTOR;
+        int16_t y1 = (y - h / 2) / FACTOR;
+        int16_t x2 = (x + w / 2) / FACTOR;
+        int16_t y2 = y1 + EYE_HEIGHT / 3;
+
+        if (type == Types::EYE_LEFT)  {
+          display->fillTriangle(x1, y1, x2, y1, x2, y2, SSD1306_BLACK);
+        } else {
+          display->fillTriangle(x1, y1, x2, y1, x1, y2, SSD1306_BLACK);
+        }
+      }
+      break;
+  }
 }
 
-void Eye::GetEyes(const uint16_t &width, const uint16_t &height, const Types::Mood &mood, const Types::EyePosition &position, Eye (&eyes)[Types::EYES]) {
+void Eye::GetEyes(const uint16_t &width, const uint16_t &height, const Types::Mood &mood, const Types::MoodSub &submood, const Types::EyePosition &position, Eye (&eyes)[Types::EYES]) {
   switch (mood) {
     case Types::MOOD_NORMAL:
     case Types::MOOD_ANGRY:
