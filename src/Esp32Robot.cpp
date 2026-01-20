@@ -5,14 +5,14 @@ const int8_t Esp32Robot::OFFSET_DEFAULT = 0;
 const int8_t Esp32Robot::POSITION_DEFAULT = 0;
 
 const int8_t Esp32Robot::DRIVE_DRIVE_DEFAULT = 90;
-const int8_t Esp32Robot::DRIVE_ANKLE_LEFT_DEFAULT = 125;
-const int8_t Esp32Robot::DRIVE_ANKLE_RIGHT_DEFAULT = 45;
-const int8_t Esp32Robot::DRIVE_ARM_DEFAULT = 45;
+const int8_t Esp32Robot::DRIVE_ANKLE_LEFT_DEFAULT = 45;
+const int8_t Esp32Robot::DRIVE_ANKLE_RIGHT_DEFAULT = 125;
+const int8_t Esp32Robot::DRIVE_ARM_DEFAULT = 90;
 
 const int8_t Esp32Robot::WALK_DRIVE_DEFAULT = 90;
-const int8_t Esp32Robot::WALK_ANKLE_LEFT_DEFAULT = 45;
-const int8_t Esp32Robot::WALK_ANKLE_RIGHT_DEFAULT = 125;
-const int8_t Esp32Robot::WALK_ARM_DEFAULT = 45;
+const int8_t Esp32Robot::WALK_ANKLE_LEFT_DEFAULT = 125;
+const int8_t Esp32Robot::WALK_ANKLE_RIGHT_DEFAULT = 45;
+const int8_t Esp32Robot::WALK_ARM_DEFAULT = 90;
 
 Esp32Robot::Esp32Robot(void) :
   data() {
