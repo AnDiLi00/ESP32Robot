@@ -8,8 +8,9 @@ class Animation {
 public:
   static const unsigned long TIME_DEFAULT;
   static const unsigned long TIME_UPDATE;
-  static const unsigned long TIME_IDLE;
+  static const unsigned long TIME_IDLE_MIN;
   static const unsigned long TIME_IDLE_VARIANCE;
+  static const unsigned long TIME_BLINK_MIN;
 
   Animation(void);
   Animation(const Animation &copy);
@@ -27,6 +28,7 @@ protected:
   virtual void DoUpdate(const unsigned long &now);
 
   virtual unsigned long GetIdleDuration(void);
+  virtual unsigned long GetAnimationDuration(const Types::AnimType &animation, const Types::AnimSubType &animation_sub);
 
   struct Data {
     Types::Mood mood;
@@ -36,7 +38,7 @@ protected:
 
     unsigned long last_update;
     unsigned long last_idle;
-    unsigned long duration;
+    unsigned long duration_idle;
 
     Eyes eyes;
 
@@ -48,7 +50,7 @@ protected:
       animation_sub(Types::SUB_NONE),
       last_update(TIME_DEFAULT),
       last_idle(TIME_DEFAULT),
-      duration(TIME_DEFAULT),
+      duration_idle(TIME_DEFAULT),
       eyes(Eyes()),
       anim(0) {
     }

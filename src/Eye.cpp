@@ -12,10 +12,10 @@ const uint16_t Eye::EYE_BORDER = 10;
 const int16_t Eye::FACTOR = 100;
 
 Eye::Eye(void) :
-  x(EYE_VALUE_DEFAULT),
-  y(EYE_VALUE_DEFAULT),
-  w(EYE_WIDTH),
-  h(EYE_HEIGHT),
+  x(EYE_VALUE_DEFAULT * FACTOR),
+  y(EYE_VALUE_DEFAULT * FACTOR),
+  w(EYE_WIDTH * FACTOR),
+  h(EYE_HEIGHT * FACTOR),
   increment_x(FACTOR),
   increment_y(FACTOR),
   increment_w(FACTOR),
@@ -237,4 +237,20 @@ void Eye::GetEyes(const uint16_t &width, const uint16_t &height, const Types::Mo
   eyes[Types::EYE_RIGHT].y *= FACTOR;
   eyes[Types::EYE_RIGHT].w *= FACTOR;
   eyes[Types::EYE_RIGHT].h *= FACTOR;
+}
+
+void Eye::UpdateIncrement(const int16_t &steps, Eye (&eyes_from)[Types::EYES], Eye (&eyes_to)[Types::EYES]) {
+  for (uint8_t i = 0; i < Types::EYES; i++) {
+    int16_t distance_x = (eyes_to[i].x > eyes_from[i].x) ? (eyes_to[i].x - eyes_from[i].x) : (eyes_from[i].x - eyes_to[i].x);
+    eyes_to[i].increment_x = ((distance_x % steps) == 0) ? (distance_x / steps) : ((distance_x / steps) + 1);
+
+    int16_t distance_y = (eyes_to[i].y > eyes_from[i].y) ? (eyes_to[i].y - eyes_from[i].y) : (eyes_from[i].y - eyes_to[i].y);
+    eyes_to[i].increment_y = ((distance_y % steps) == 0) ? (distance_y / steps) : ((distance_y / steps) + 1);
+
+    int16_t distance_w = (eyes_to[i].w > eyes_from[i].w) ? (eyes_to[i].w - eyes_from[i].w) : (eyes_from[i].w - eyes_to[i].w);
+    eyes_to[i].increment_w = ((distance_w % steps) == 0) ? (distance_w / steps) : ((distance_w / steps) + 1);
+
+    int16_t distance_h = (eyes_to[i].h > eyes_from[i].h) ? (eyes_to[i].h - eyes_from[i].h) : (eyes_from[i].h - eyes_to[i].h);
+    eyes_to[i].increment_h = ((distance_h % steps) == 0) ? (distance_h / steps) : ((distance_h / steps) + 1);
+  }
 }

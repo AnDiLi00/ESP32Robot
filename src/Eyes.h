@@ -26,7 +26,7 @@ public:
   virtual void OnLoop(const Types::Mood &mood);
   virtual void OnEnd(void);
 
-  virtual void OnMoodChange(const Types::Mood &mood);
+  virtual void OnMoodChange(const Types::Mood &mood, const unsigned long &steps);
 
 protected:
   virtual void DrawBackground(void);

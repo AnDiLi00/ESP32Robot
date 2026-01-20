@@ -124,12 +124,13 @@ void Eyes::OnLoop(const Types::Mood &mood) {
 void Eyes::OnEnd(void) {
 }
 
-void Eyes::OnMoodChange(const Types::Mood &mood) {
+void Eyes::OnMoodChange(const Types::Mood &mood, const unsigned long &steps) {
   if (data.display == NULL) {
     return;
   }
 
   Eye::GetEyes(data.display->width(), data.display->height(), mood, data.position, data.eyes_new);
+  Eye::UpdateIncrement(steps, data.eyes, data.eyes_new);
 }
 
 void Eyes::DrawBackground(void) {

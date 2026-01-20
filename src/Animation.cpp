@@ -2,8 +2,10 @@
 
 const unsigned long Animation::TIME_DEFAULT = 0;
 const unsigned long Animation::TIME_UPDATE = 20;
-const unsigned long Animation::TIME_IDLE = 5000;
+const unsigned long Animation::TIME_IDLE_MIN = 4200;
 const unsigned long Animation::TIME_IDLE_VARIANCE = 1600;
+const unsigned long Animation::TIME_BLINK_MIN = 300;
+const unsigned long Animation::TIME_TRANSITION_MIN = 300;
 
 Animation::Animation(void) :
   data() {
@@ -19,7 +21,7 @@ Animation::Animation(const Animation &copy) :
 
   data.last_update = copy.data.last_update;
   data.last_idle = copy.data.last_idle;
-  data.duration = copy.data.duration;
+  data.duration_idle = copy.data.duration_idle;
 
   data.eyes = Eyes(copy.data.eyes);
 
@@ -38,7 +40,7 @@ Animation &Animation::operator=(const Animation &other) {
 
     data.last_update = other.data.last_update;
     data.last_idle = other.data.last_idle;
-    data.duration = other.data.duration;
+    data.duration_idle = other.data.duration_idle;
 
     data.eyes = Eyes(other.data.eyes);
 
@@ -105,22 +107,22 @@ void Animation::DoUpdate(const unsigned long &now) {
 
   switch (data.animation) {
     case Types::ANIM_IDLE:
-      if (difference_idle >= data.duration) {
+      if (difference_idle >= data.duration_idle) {
         if (data.anim % 2 == 0) {
           // blink
           data.animation = Types::ANIM_BLINK;
           data.animation_sub = Types::SUB_CLOSING;
 
-          data.eyes.OnMoodChange(Types::MOOD_CLOSED);
+          data.eyes.OnMoodChange(Types::MOOD_CLOSED, GetAnimationSteps());
         } else {
           // switch mood
           data.last_idle = now;
-          data.duration = GetIdleDuration();
+          data.duration_idle = GetIdleDuration();
 
           int8_t new_mood = ((int8_t)data.mood + 1) % (int8_t)Types::MOODS;
           SetMood((Types::Mood)new_mood);
 
-          data.eyes.OnMoodChange(data.mood);
+          data.eyes.OnMoodChange(data.mood, GetAnimationSteps());
         }
         data.anim++;
       }
@@ -133,18 +135,18 @@ void Animation::DoUpdate(const unsigned long &now) {
           if (data.eyes.AreTransitioned() == true) {
             data.animation_sub = Types::SUB_OPENING;
 
-            data.eyes.OnMoodChange(data.mood);
+            data.eyes.OnMoodChange(data.mood, GetAnimationSteps());
           }
           break;
         case Types::SUB_OPENING:
           if (data.eyes.AreTransitioned() == true) {
             data.last_idle = now;
-            data.duration = GetIdleDuration();
+            data.duration_idle = GetIdleDuration();
 
             data.animation = Types::ANIM_IDLE;
             data.animation_sub = Types::SUB_NONE;
 
-            data.eyes.OnMoodChange(data.mood);
+            data.eyes.OnMoodChange(data.mood, GetAnimationSteps());
           }
           break;
       }
@@ -155,6 +157,31 @@ void Animation::DoUpdate(const unsigned long &now) {
 }
 
 unsigned long Animation::GetIdleDuration(void) {
-  unsigned long random_idle = (unsigned long)random(TIME_IDLE_VARIANCE);
-  return (TIME_IDLE - TIME_IDLE_VARIANCE / 2 + random_idle);
+  unsigned long random_idle = ((TIME_IDLE_MIN + (unsigned long)random(TIME_IDLE_VARIANCE)) / TIME_UPDATE) * TIME_UPDATE;
+
+  return (random_idle);
+}
+
+unsigned long Animation::GetAnimationSteps(void) {
+  unsigned long steps = 0;
+
+  switch (data.animation) {
+    case Types::ANIM_IDLE:
+      steps = TIME_TRANSITION_MIN / TIME_UPDATE;
+      break;
+    case Types::ANIM_BLINK:
+      switch (data.animation_sub) {
+        case Types::SUB_NONE:
+          break;
+        case Types::SUB_CLOSING:
+        case Types::SUB_OPENING:
+          steps = TIME_BINK_MIN / TIME_UPDATE;
+          break;
+      }
+      break;
+    case Types::ANIM_SHAKE:
+      break;
+  }
+
+  return (steps);
 }
