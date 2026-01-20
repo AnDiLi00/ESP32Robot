@@ -164,15 +164,9 @@ void Eye::Draw(Adafruit_SSD1306 *display, const Types::Mood &mood, const Types::
       break;
     case Types::MSUB_HAPPY:
       {
-        int16_t x1 = (x - w / 2) / FACTOR;
-        int16_t y1 = (y - h / 2) / FACTOR;
-        int16_t x2 = (x + w / 2) / FACTOR;
-        int16_t y2 = y1 + EYE_HEIGHT / 3;
-
-        if (type == Types::EYE_LEFT)  {
-          display->fillTriangle(x1, y1, x2, y1, x2, y2, SSD1306_BLACK);
-        } else {
-          display->fillTriangle(x1, y1, x2, y1, x1, y2, SSD1306_BLACK);
+        if (mood != Types::MOOD_TIRED) {
+          int16_t r1 = w1 / 2;
+          display->fillCircle(x1 + r1, y1 + h1, r1, SSD1306_BLACK);
         }
       }
       break;

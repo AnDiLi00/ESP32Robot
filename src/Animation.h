@@ -45,7 +45,8 @@ protected:
 
     Eyes eyes;
 
-    int8_t anim;
+    int8_t anim1;
+    int8_t anim2;
 
     Data(void) :
       mood(Types::MOOD_NORMAL),
@@ -56,7 +57,8 @@ protected:
       last_idle(TIME_DEFAULT),
       duration_idle(TIME_DEFAULT),
       eyes(Eyes()),
-      anim(0) {
+      anim1(0),
+      anim2(0) {
     }
   };
 
