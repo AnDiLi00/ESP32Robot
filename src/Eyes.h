@@ -32,6 +32,8 @@ protected:
   virtual void DrawBackground(void);
   virtual void DrawEyes(const Types::Mood &mood, const Types::MoodSub &submood);
 
+  virtual void PrintPosition(void) const;
+
   struct Data {
     Adafruit_SSD1306 *display;
     Types::EyePosition position;

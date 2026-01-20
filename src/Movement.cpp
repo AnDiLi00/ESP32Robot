@@ -87,14 +87,12 @@ void Movement::SetMode(const Types::MovementMode &mode) {
 
     switch (data.mode) {
       case Types::MOVE_DRIVE:
-        Serial.println("mode=drive");
         Move(Types::PART_LEFT_DRIVE, DRIVE_DRIVE_DEFAULT);
         Move(Types::PART_RIGHT_DRIVE, DRIVE_DRIVE_DEFAULT);
         Move(Types::PART_LEFT_ANKLE, DRIVE_ANKLE_LEFT_DEFAULT);
         Move(Types::PART_RIGHT_ANKLE, DRIVE_ANKLE_RIGHT_DEFAULT);
         break;
       case Types::MOVE_WALK:
-        Serial.println("mode=walk");
         Move(Types::PART_LEFT_DRIVE, WALK_DRIVE_DEFAULT);
         Move(Types::PART_RIGHT_DRIVE, WALK_DRIVE_DEFAULT);
         Move(Types::PART_LEFT_ANKLE, WALK_ANKLE_LEFT_DEFAULT);
@@ -117,9 +115,6 @@ void Movement::OnEnd(void) {
 }
 
 void Movement::OnModeChange(const uint8_t &mode) {
-  Serial.print("OnModeChange::mode=");
-  Serial.println(mode);
-
   if (mode == 1) {
     SetMode(Types::MOVE_WALK);
   } else {
@@ -171,6 +166,13 @@ int8_t Movement::GetOffset(const Types::BodyParts &part, const Types::MovementMo
   return (ret);
 }
 
-Types::MovementMode Movement::GetMode(void) const {
-  return (data.mode);
+void Movement::PrintMode(void) const {
+  switch (data.mode) {
+    case Types::MOVE_DRIVE:
+      Serial.println("mode=drive");
+      break;
+    case Types::MOVE_WALK:
+      Serial.println("mode=walk");
+      break;
+  }
 }

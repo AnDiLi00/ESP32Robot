@@ -29,8 +29,13 @@ public:
 protected:
   virtual void DoUpdate(const unsigned long &now);
 
-  virtual unsigned long GetIdleDuration(void);
-  virtual unsigned long GetAnimationSteps(void);
+  virtual unsigned long GetIdleDuration(void) const;
+  virtual unsigned long GetAnimationSteps(void) const;
+
+  virtual void DoAnimationTest(void);
+
+  virtual void PrintMood(void) const;
+  virtual void PrintSubMood(void) const;
 
   struct Data {
     Types::Mood mood;
@@ -45,8 +50,9 @@ protected:
 
     Eyes eyes;
 
-    int8_t anim1;
-    int8_t anim2;
+    bool test;
+    int8_t test_anim1;
+    int8_t test_anim2;
 
     Data(void) :
       mood(Types::MOOD_NORMAL),
@@ -57,8 +63,9 @@ protected:
       last_idle(TIME_DEFAULT),
       duration_idle(TIME_DEFAULT),
       eyes(Eyes()),
-      anim1(0),
-      anim2(0) {
+      test(false),
+      test_anim1(0),
+      test_anim2(0) {
     }
   };
 

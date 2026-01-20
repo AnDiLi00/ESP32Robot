@@ -45,7 +45,8 @@ protected:
   virtual void Move(const Types::BodyParts &part, const int8_t &position);
 
   virtual int8_t GetOffset(const Types::BodyParts &part, const Types::MovementMode &mode) const;
-  virtual Types::MovementMode GetMode(void) const;
+
+  virtual void PrintMode(void) const;
 
   struct Data {
     int8_t pins[Types::PART_PARTS];

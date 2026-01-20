@@ -57,39 +57,6 @@ void Eyes::SetDisplay(Adafruit_SSD1306 *display) {
 void Eyes::SetPosition(const Types::EyePosition &position) {
   if (position != data.position) {
     data.position = position;
-
-    switch (data.position) {
-      case Types::POS_CENTER:
-        Serial.println("position=center");
-        break;
-      case Types::POS_CENTER_LEFT:
-        Serial.println("position=center left");
-        break;
-      case Types::POS_CENTER_RIGHT:
-        Serial.println("position=center right");
-        break;
-      case Types::POS_TOP:
-        Serial.println("position=top center");
-        break;
-      case Types::POS_TOP_LEFT:
-        Serial.println("position=top left");
-        break;
-      case Types::POS_TOP_RIGHT:
-        Serial.println("position=top right");
-        break;
-      case Types::POS_BOTTOM:
-        Serial.println("position=bottom center");
-        break;
-      case Types::POS_BOTTOM_LEFT:
-        Serial.println("position=bottom left");
-        break;
-      case Types::POS_BOTTOM_RIGHT:
-        Serial.println("position=bottom right");
-        break;
-      case Types::POSITIONS:
-        Serial.println("position=positions?!");
-        break;
-    }
   }
 }
 
@@ -142,5 +109,40 @@ void Eyes::DrawEyes(const Types::Mood &mood, const Types::MoodSub &submood) {
     data.eyes[i].Transition(data.eyes_new[i]);
 
     data.eyes[i].Draw(data.display, mood, submood, (Types::EyeType)i);
+  }
+}
+
+void Eyes::PrintPosition(void) const;
+  switch (data.position) {
+    case Types::POS_CENTER:
+      Serial.println("position=center");
+      break;
+    case Types::POS_CENTER_LEFT:
+      Serial.println("position=center left");
+      break;
+    case Types::POS_CENTER_RIGHT:
+      Serial.println("position=center right");
+      break;
+    case Types::POS_TOP:
+      Serial.println("position=top center");
+      break;
+    case Types::POS_TOP_LEFT:
+      Serial.println("position=top left");
+      break;
+    case Types::POS_TOP_RIGHT:
+      Serial.println("position=top right");
+      break;
+    case Types::POS_BOTTOM:
+      Serial.println("position=bottom center");
+      break;
+    case Types::POS_BOTTOM_LEFT:
+      Serial.println("position=bottom left");
+      break;
+    case Types::POS_BOTTOM_RIGHT:
+      Serial.println("position=bottom right");
+      break;
+    case Types::POSITIONS:
+      Serial.println("position=positions?!");
+      break;
   }
 }

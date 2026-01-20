@@ -4,8 +4,8 @@ const unsigned long Animation::TIME_DEFAULT = 0;
 const unsigned long Animation::TIME_UPDATE = 20;
 const unsigned long Animation::TIME_IDLE_MIN = 4200;
 const unsigned long Animation::TIME_IDLE_VARIANCE = 1600;
-const unsigned long Animation::TIME_BLINK_MIN = 60;
-const unsigned long Animation::TIME_TRANSITION_MIN = 100;
+const unsigned long Animation::TIME_BLINK_MIN = 100;
+const unsigned long Animation::TIME_TRANSITION_MIN = 60;
 
 Animation::Animation(void) :
   data() {
@@ -26,8 +26,9 @@ Animation::Animation(const Animation &copy) :
 
   data.eyes = Eyes(copy.data.eyes);
 
-  data.anim1 = copy.data.anim1;
-  data.anim2 = copy.data.anim2;
+  data.test = copy.data.test;
+  data.test_anim1 = copy.data.test_anim1;
+  data.test_anim2 = copy.data.test_anim2;
 }
 
 Animation::~Animation(void) {
@@ -47,8 +48,9 @@ Animation &Animation::operator=(const Animation &other) {
 
     data.eyes = Eyes(other.data.eyes);
 
-    data.anim1 = other.data.anim1;
-    data.anim2 = other.data.anim2;
+    data.test = other.data.test;
+    data.test_anim1 = other.data.test_anim1;
+    data.test_anim2 = other.data.test_anim2;
   }
 
   return (*this);
@@ -61,45 +63,12 @@ void Animation::SetDisplay(Adafruit_SSD1306 *display) {
 void Animation::SetMood(const Types::Mood &mood) {
   if (mood != data.mood) {
     data.mood = mood;
-
-    switch (data.mood) {
-      case Types::MOOD_NORMAL:
-        Serial.println("mood=normal");
-        break;
-      case Types::MOOD_CONFUSED:
-        Serial.println("mood=confused");
-        break;
-      case Types::MOOD_ANGRY:
-        Serial.println("mood=angry");
-        break;
-      case Types::MOOD_TIRED:
-        Serial.println("mood=tired");
-        break;
-      case Types::MOOD_CLOSED:
-        Serial.println("mood=closed");
-        break;
-      case Types::MOODS:
-        Serial.println("mood=moods?!");
-        break;
-    }
   }
 }
 
 void Animation::SetSubMood(const Types::MoodSub &mood_sub) {
   if (mood_sub != data.mood_sub) {
     data.mood_sub = mood_sub;
-
-    switch (data.mood_sub) {
-      case Types::MSUB_NORMAL:
-        Serial.println("submood=normal");
-        break;
-      case Types::MSUB_HAPPY:
-        Serial.println("submood=happy");
-        break;
-      case Types::SUBMOODS:
-        Serial.println("submood=submoods?!");
-        break;
-    }
   }
 }
 
@@ -130,39 +99,10 @@ void Animation::DoUpdate(const unsigned long &now) {
   switch (data.animation) {
     case Types::ANIM_IDLE:
       if (difference_idle >= data.duration_idle) {
-        if (data.anim1 % 2 == 0) {
-          // blink
-          Serial.println("animation=blink");
-
-          data.animation = Types::ANIM_BLINK;
-          data.animation_sub = Types::SUB_CLOSING;
-
-          data.eyes.OnMoodChange(Types::MOOD_CLOSED, data.mood_sub, GetAnimationSteps());
+        if (data.test == true) {
+          DoAnimationTest();
         } else {
-          // switch mood
-          Serial.println("animation=mood change");
-
-          data.last_idle = now;
-          data.duration_idle = GetIdleDuration();
-
-          if (data.anim2 % 2 == 0) {
-            int8_t new_mood = ((int8_t)data.mood + 1) % (int8_t)Types::MOODS;
-            SetMood((Types::Mood)new_mood);
-            SetSubMood(Types::MSUB_NORMAL);
-          } else {
-            int8_t new_submood = ((int8_t)data.mood_sub + 1) % (int8_t)Types::SUBMOODS;
-            SetSubMood((Types::MoodSub)new_submood);
-          }
-
-          data.eyes.OnMoodChange(data.mood, data.mood_sub, GetAnimationSteps());
-
-          if (data.mood != Types::MOOD_CLOSED) {
-            data.anim2++;
-          } else {
-            data.anim1++;
-          }
         }
-        data.anim1++;
       }
       break;
     case Types::ANIM_BLINK:
@@ -194,13 +134,13 @@ void Animation::DoUpdate(const unsigned long &now) {
   }
 }
 
-unsigned long Animation::GetIdleDuration(void) {
+unsigned long Animation::GetIdleDuration(void) const {
   unsigned long random_idle = ((TIME_IDLE_MIN + (unsigned long)random(TIME_IDLE_VARIANCE)) / TIME_UPDATE) * TIME_UPDATE;
 
   return (random_idle);
 }
 
-unsigned long Animation::GetAnimationSteps(void) {
+unsigned long Animation::GetAnimationSteps(void) const {
   unsigned long steps = 0;
 
   switch (data.animation) {
@@ -222,4 +162,73 @@ unsigned long Animation::GetAnimationSteps(void) {
   }
 
   return (steps);
+}
+
+virtual void Animation::DoAnimationTest(void) {
+  if (data.test_anim1 % 2 == 0) {
+    // blink
+    data.animation = Types::ANIM_BLINK;
+    data.animation_sub = Types::SUB_CLOSING;
+
+    data.eyes.OnMoodChange(Types::MOOD_CLOSED, data.mood_sub, GetAnimationSteps());
+  } else {
+    // switch through all moods and submoods
+    data.last_idle = now;
+    data.duration_idle = GetIdleDuration();
+
+    if (data.test_anim2 % 2 == 0) {
+      int8_t new_mood = ((int8_t)data.mood + 1) % (int8_t)Types::MOODS;
+      SetMood((Types::Mood)new_mood);
+      SetSubMood(Types::MSUB_NORMAL);
+    } else {
+      int8_t new_submood = ((int8_t)data.mood_sub + 1) % (int8_t)Types::SUBMOODS;
+      SetSubMood((Types::MoodSub)new_submood);
+    }
+
+    data.eyes.OnMoodChange(data.mood, data.mood_sub, GetAnimationSteps());
+
+    if (data.mood != Types::MOOD_CLOSED) {
+      data.test_anim2++;
+    } else {
+      data.test_anim1++;
+    }
+  }
+  data.test_anim1++;
+}
+
+virtual void Animation::PrintMood(void) const {
+  switch (data.mood) {
+    case Types::MOOD_NORMAL:
+      Serial.println("mood=normal");
+      break;
+    case Types::MOOD_CONFUSED:
+      Serial.println("mood=confused");
+      break;
+    case Types::MOOD_ANGRY:
+      Serial.println("mood=angry");
+      break;
+    case Types::MOOD_TIRED:
+      Serial.println("mood=tired");
+      break;
+    case Types::MOOD_CLOSED:
+      Serial.println("mood=closed");
+      break;
+    case Types::MOODS:
+      Serial.println("mood=moods?!");
+      break;
+  }
+}
+
+virtual void Animation::PrintSubMood(void) const {
+  switch (data.mood_sub) {
+    case Types::MSUB_NORMAL:
+      Serial.println("submood=normal");
+      break;
+    case Types::MSUB_HAPPY:
+      Serial.println("submood=happy");
+      break;
+    case Types::SUBMOODS:
+      Serial.println("submood=submoods?!");
+      break;
+  }
 }
