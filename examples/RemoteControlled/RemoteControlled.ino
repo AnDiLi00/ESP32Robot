@@ -43,7 +43,7 @@ void RemoteXY_steering_event() {
 }
 
 void setup() {
-  randomSeed(12345674890);
+  randomSeed(12345678);
 
   Serial.begin(115200);
 
