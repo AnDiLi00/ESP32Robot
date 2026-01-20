@@ -11,6 +11,7 @@ public:
   static const unsigned long TIME_IDLE_MIN;
   static const unsigned long TIME_IDLE_VARIANCE;
   static const unsigned long TIME_BLINK_MIN;
+  static const unsigned long TIME_TRANSITION_MIN;
 
   Animation(void);
   Animation(const Animation &copy);
@@ -28,7 +29,7 @@ protected:
   virtual void DoUpdate(const unsigned long &now);
 
   virtual unsigned long GetIdleDuration(void);
-  virtual unsigned long GetAnimationDuration(const Types::AnimType &animation, const Types::AnimSubType &animation_sub);
+  virtual unsigned long GetAnimationSteps(void);
 
   struct Data {
     Types::Mood mood;
