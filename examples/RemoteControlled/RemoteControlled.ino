@@ -62,10 +62,7 @@ void setup() {
   Esp32Robot.SetPin(Types::PART_RIGHT_DRIVE, 23);
   Esp32Robot.SetPin(Types::PART_LEFT_ANKLE, 19);
   Esp32Robot.SetPin(Types::PART_RIGHT_ANKLE, 18);
-  Esp32Robot.SetOffset(Types::PART_LEFT_ANKLE, Types::MOVE_WALK, 0);
-  Esp32Robot.SetOffset(Types::PART_RIGHT_ANKLE, Types::MOVE_WALK, 2);
-  Esp32Robot.SetOffset(Types::PART_LEFT_ANKLE, Types::MOVE_DRIVE, 0);
-  Esp32Robot.SetOffset(Types::PART_RIGHT_ANKLE, Types::MOVE_DRIVE, 0);
+  Esp32Robot.SetOffset(Types::PART_LEFT_ANKLE, Types::MOVE_WALK, 4);
   Esp32Robot.SetMode(Types::MOVE_WALK);
 
   Esp32Robot.OnSetup();
