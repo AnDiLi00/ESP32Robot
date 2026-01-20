@@ -16,6 +16,7 @@ public:
   virtual ~Animation(void);
   Animation &operator=(const Animation &other);
 
+  virtual void SetDisplay(Adafruit_SSD1306 *display);
   virtual void SetMood(const Types::Mood &mood);
 
   virtual void OnSetup(void);

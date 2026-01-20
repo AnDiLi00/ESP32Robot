@@ -48,6 +48,10 @@ Animation &Animation::operator=(const Animation &other) {
   return (*this);
 }
 
+void Animation::SetDisplay(Adafruit_SSD1306 *display) {
+  data.eyes.SetDisplay(display);
+}
+
 void Animation::SetMood(const Types::Mood &mood) {
   if (mood != data.mood) {
     data.mood = mood;

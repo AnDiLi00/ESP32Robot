@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 
-#include <BLEDevice.h>
 #include <ESP32Servo.h>
 
 #include "Animation.h"
@@ -30,9 +29,9 @@ public:
   virtual ~Esp32Robot(void);
   Esp32Robot &operator=(const Esp32Robot &other);
 
-  virtual int8_t GetPin(const Types::BodyParts &part) const;
   virtual int8_t GetOffset(const Types::BodyParts &part, const Types::MovementMode &mode) const;
 
+  virtual void SetDisplay(Adafruit_SSD1306 *display);
   virtual void SetPin(const Types::BodyParts &part, const int8_t &pin);
   virtual void SetOffset(const Types::BodyParts &part, const Types::MovementMode &mode, const int8_t &offset);
 
@@ -65,7 +64,7 @@ protected:
     Animation animation;
 
     Data(void) :
-      mode(Types::MOVE_UNDEFINED),
+      mode(Types::MOVE_DRIVE),
       animation(Animation()) {
 
       for (uint8_t i = 0; i < Types::PART_PARTS; i++) {

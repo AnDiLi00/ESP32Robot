@@ -44,7 +44,6 @@ public:
   };
 
   enum MovementMode {
-    MOVE_UNDEFINED,
     MOVE_DRIVE,
     MOVE_WALK
   };

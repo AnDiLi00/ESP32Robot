@@ -63,16 +63,10 @@ Esp32Robot &Esp32Robot::operator=(const Esp32Robot &other) {
   return (*this);
 }
 
-int8_t Esp32Robot::GetPin(const Types::BodyParts &part) const {
-  return (data.pins[part]);
-}
-
 int8_t Esp32Robot::GetOffset(const Types::BodyParts &part, const Types::MovementMode &mode) const {
   int8_t ret = OFFSET_DEFAULT;
 
   switch (mode) {
-    case Types::MOVE_UNDEFINED:
-      break;
     case Types::MOVE_DRIVE:
       ret = data.offsets_drive[part];
       break;
@@ -82,6 +76,10 @@ int8_t Esp32Robot::GetOffset(const Types::BodyParts &part, const Types::Movement
   }
 
   return (ret);
+}
+
+void Esp32Robot::SetDisplay(Adafruit_SSD1306 *display) {
+  data.animation.SetDisplay(display);
 }
 
 void Esp32Robot::SetPin(const Types::BodyParts &part, const int8_t &pin) {
@@ -97,8 +95,6 @@ void Esp32Robot::SetPin(const Types::BodyParts &part, const int8_t &pin) {
 
 void Esp32Robot::SetOffset(const Types::BodyParts &part, const Types::MovementMode &mode, const int8_t &offset) {
   switch (mode) {
-    case Types::MOVE_UNDEFINED:
-      break;
     case Types::MOVE_DRIVE:
       data.offsets_drive[part] = offset;
       break;
@@ -126,9 +122,6 @@ void Esp32Robot::SetMode(const Types::MovementMode &mode) {
     data.mode = mode;
 
     switch (data.mode) {
-      case Types::MOVE_UNDEFINED:
-        Serial.println("mode=undefined");
-        break;
       case MOVE_DRIVE:
         Serial.println("mode=drive");
         Move(Types::PART_LEFT_DRIVE, DRIVE_DRIVE_DEFAULT);
