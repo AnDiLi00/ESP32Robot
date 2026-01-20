@@ -1,12 +1,16 @@
+#include <Adafruit_LEDBackpack.h>
 #include <Adafruit_SSD1306.h>
 #include <BLEDevice.h>
 #include <Esp32Robot.h>
 #include <RemoteXY.h>
 
-// Display setup
+// display setup
 Adafruit_SSD1306 display(Eyes::DISPLAY_WIDTH, Eyes::DISPLAY_HEIGHT, &Wire, Eyes::DISPLAY_RESET);
 
-// RemoteXY GUI configuration
+// matrix setup
+Adafruit_8x8matrix matrix;
+
+// remotexy gui configuration
 #pragma pack(push, 1)
 uint8_t const PROGMEM RemoteXY_CONF_PROGMEM[] = {
   255, 5, 0, 0, 0, 68, 0, 19, 0, 0, 0, 82, 111, 98, 111, 0, 31, 1, 200, 84,
@@ -56,7 +60,6 @@ void setup() {
   // set remotexy mode to 'walk' since robot is set to walk
   RemoteXY.mode = 1;
 
-  // Esp32Robot Setup
   Esp32Robot.SetDisplay(&display);
   Esp32Robot.SetPin(Types::PART_LEFT_DRIVE, 5);
   Esp32Robot.SetPin(Types::PART_RIGHT_DRIVE, 23);
