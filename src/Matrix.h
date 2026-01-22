@@ -9,10 +9,19 @@ class Matrix {
 public:
   static const uint8_t BRIGHTNESS_DEFAULT;
 
+  static const uint8_t UPDATE_CYCLES;
+  static const uint8_t CYCLES_DEFAULT;
+
   static const int8_t SIZE;
   static const int8_t OFFSET_DEFAULT;
 
+  struct Special {
+    char sign;
+    uint64_t image;
+  };
+
   static constexpr const uint64_t IMG_DIGITS[] = {
+    0x007cfe928afe7c00,
     0x008088fefe808000,
     0x00c4e6a2929e8c00,
     0x0044c69292fe6c00,
@@ -21,9 +30,9 @@ public:
     0x007cfe9292f66400,
     0x000606e2fa1e0600,
     0x006cfe9292fe6c00,
-    0x004cde9292fe7c00,
-    0x007cfe928afe7c00
+    0x004cde9292fe7c00
   };
+  static constexpr const uint8_t IMG_DIGITS_SIZE = sizeof(IMG_DIGITS) / sizeof(IMG_DIGITS[0]);
 
   static constexpr const uint64_t IMG_LETTERS_BIG[] = {
     0x00fcfe1212fefc00,
@@ -53,6 +62,7 @@ public:
     0x000e1ef0f01e0e00,
     0x00c2e2b29a8e8600
   };
+  static constexpr const uint8_t IMG_LETTERS_BIG_SIZE = sizeof(IMG_LETTERS_BIG) / sizeof(IMG_LETTERS_BIG[0]);
 
   static constexpr const uint64_t IMG_LETTERS_SMALL[] = {
     0x0040e8a8a8f8f000,
@@ -82,7 +92,32 @@ public:
     0x0018b8a0a0f87800,
     0x0000c8e8b8980000
   };
+  static constexpr const uint8_t IMG_LETTERS_SMALL_SIZE = sizeof(IMG_LETTERS_SMALL) / sizeof(IMG_LETTERS_SMALL[0]);
 
+  static constexpr const Special IMG_SIGNS[] = {
+     { ' ', 0x0000000000000000 }, // space
+     { '.', 0x00c0c00000000000 }, // .
+     { ':', 0x0000006c6c000000 }, // :
+     { ';', 0x000080ec6c000000 }, // ;
+     { ',', 0x0080f07000000000 }, // ,
+     { '!', 0x00000cbebe0c0000 }, // !
+     { '?', 0x000406b2b21e0c00 }, // ?
+     { '§', 0x001c3e7cf87c3e1c }, // heart == '§'
+     { '$', 0x0010387cfe7c3810 }, // diamond == '$'
+     { '%', 0x00103894fe943810 }, // club == '%'
+     { '&', 0x001038bcfebc3810 }, // spade == '&'
+     { '+', 0x00609090720a061e }, // male == '+'
+     { '-', 0x000064949e946400 }, // female == '-'
+     { '(', 0x00c0e07e02040000 }, // note == '('
+     { ')', 0x00c0e07c0662723e }, // notes == ')'
+     { '{', 0x00105438ee385410 }, // sun == '{'
+     { '}', 0x0026464040462600 }, // smile == '}'
+     { '[', 0x0046262020264600 }, // frown == '['
+     { ']', 0x0026242020242600 } // angry == ']'
+  };
+  static constexpr const uint8_t IMG_SIGNS_SIZE = sizeof(IMG_SIGNS) / sizeof(IMG_SIGNS[0]);
+
+  /*
   static constexpr const uint64_t IMG_SIGNS[] = {
     0x0000000000000000, // space
     0x00c0c00000000000, // .
@@ -91,19 +126,42 @@ public:
     0x0080f07000000000, // ,
     0x00000cbebe0c0000, // !
     0x000406b2b21e0c00, // ?
-    0x001c3e7cf87c3e1c, // 'heart'
-    0x0010387cfe7c3810, // 'diamond'
-    0x00103894fe943810, // 'club'
-    0x001038bcfebc3810, // 'spade'
-    0x00609090720a061e, // 'male'
-    0x000064949e946400, // 'female'
-    0x00c0e07e02040000, // 'note'
-    0x00c0e07c0662723e, // 'notes'
-    0x00105438ee385410, // 'sun'
-    0x0026464040462600, // 'smile'
-    0x0046262020264600, // 'frown'
-    0x0026242020242600 // 'angry'
+    0x001c3e7cf87c3e1c, // heart == '§'
+    0x0010387cfe7c3810, // diamond == '$'
+    0x00103894fe943810, // club == '%'
+    0x001038bcfebc3810, // spade == '&'
+    0x00609090720a061e, // male == '+'
+    0x000064949e946400, // female == '-'
+    0x00c0e07e02040000, // note == '('
+    0x00c0e07c0662723e, // notes == ')'
+    0x00105438ee385410, // sun == '{'
+    0x0026464040462600, // smile == '}'
+    0x0046262020264600, // frown == '['
+    0x0026242020242600 // angry == ']'
   };
+
+  static constexpr const char CHAR_SIGNS[] = {
+    ' ',
+    '.',
+    ':',
+    ';',
+    ',',
+    '!',
+    '?',
+    '§',
+    '$',
+    '%',
+    '&',
+    '+',
+    '-',
+    '(',
+    ')',
+    '{',
+    '}',
+    '[',
+    ']'
+  };
+  */
 
   Matrix(void);
   Matrix(const Matrix &copy);
@@ -118,18 +176,26 @@ public:
   virtual void OnEnd(void);
 
 protected:
+  virtual void DrawCharacter(const char *character, const int8_t &offset);
   virtual void DrawImage(const uint64_t &image, const int8_t &offset);
 
   struct Data {
     Adafruit_LEDBackpack *matrix;
+    uint8_t cycle;
 
     Types::Direction direction;
     int8_t offset;
 
+    char *text;
+    char *current;
+
     Data(void) :
       matrix(NULL),
+      cycle(CYCLES_DEFAULT),
       direction(Types::DIR_UP),
-      offset(OFFSET_DEFAULT) {
+      offset(OFFSET_DEFAULT),
+      text(NULL),
+      current(NULL) {
     }
   };
 

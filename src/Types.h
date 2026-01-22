@@ -65,11 +65,25 @@ public:
   };
 
   enum Direction {
+    DIR_NO,
     DIR_UP,
     DIR_DOWN,
     DIR_LEFT,
     DIR_RIGHT
   };
+
+  static const char SIGN_HEART = '§';
+  static const char SIGN_DIAMOND = '$';
+  static const char SIGN_CLUB = '%';
+  static const char SIGN_SPADE = '&';
+  static const char SIGN_MALE = '+';
+  static const char SIGN_FEMALE = '-';
+  static const char SIGN_NOTE = '(';
+  static const char SIGN_NOTES = ')';
+  static const char SIGN_SUN = '{';
+  static const char SIGN_SMILE = '}';
+  static const char SIGN_FROWN = '[';
+  static const char SIGN_ANGRY = ']';
 
 private:
   Types(void);
