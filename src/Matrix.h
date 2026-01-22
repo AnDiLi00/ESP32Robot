@@ -134,7 +134,7 @@ public:
   virtual ~Matrix(void);
   Matrix &operator=(const Matrix &other);
 
-  virtual void SetMatrix(Adafruit_8x8matrix *matrix);
+  virtual void SetMatrix(Adafruit_LEDBackpack *matrix);
   virtual void SetDirection(const Types::Direction &direction);
 
   virtual void OnSetup(const Types::Mood &mood, const Types::MoodSub &submood);
@@ -145,7 +145,7 @@ protected:
   virtual void DrawImage(const uint64_t &image, const int8_t &offset, const uint16_t &color);
 
   struct Data {
-    Adafruit_8x8matrix *matrix;
+    Adafruit_LEDBackpack *matrix;
 
     Types::Direction direction;
     int8_t offset;

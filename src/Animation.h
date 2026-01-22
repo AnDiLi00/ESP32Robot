@@ -20,7 +20,7 @@ public:
   Animation &operator=(const Animation &other);
 
   virtual void SetDisplay(Adafruit_SSD1306 *display);
-  virtual void SetMatrix(Adafruit_8x8matrix *matrix);
+  virtual void SetMatrix(Adafruit_LEDBackpack *matrix);
 
   virtual void SetMood(const Types::Mood &mood);
   virtual void SetSubMood(const Types::MoodSub &mood_sub);

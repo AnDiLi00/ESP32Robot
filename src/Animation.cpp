@@ -62,7 +62,7 @@ void Animation::SetDisplay(Adafruit_SSD1306 *display) {
   data.eyes.SetDisplay(display);
 }
 
-void Animation::SetMatrix(Adafruit_8x8matrix *matrix) {
+void Animation::SetMatrix(Adafruit_LEDBackpack *matrix) {
   data.matrix.SetMatrix(matrix);
 }
 

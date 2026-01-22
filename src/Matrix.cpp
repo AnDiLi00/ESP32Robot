@@ -33,7 +33,7 @@ Matrix &Matrix::operator=(const Matrix &other) {
   return (*this);
 }
 
-void Matrix::SetMatrix(Adafruit_8x8matrix *matrix) {
+void Matrix::SetMatrix(Adafruit_LEDBackpack *matrix) {
   data.matrix = matrix;
 }
 
@@ -62,8 +62,14 @@ void Matrix::OnLoop(const Types::Mood &mood, const Types::MoodSub &submood) {
 
   data.matrix->clear();
 
-  uint64_t test = 0x8100000000000081;
+  uint64_t test = 0x00081c3e7f7f7722;
   DrawImage(test, data.offset, 0xf800);
+
+  int8_t size = HEIGHT;
+  if ((data.direction == Types::DIR_LEFT) ||(data.direction == Types::DIR_RIGHT)) {
+    size = WIDTH;
+  }
+  data.offset = (data.offset + 1) % size;
 
   data.matrix->writeDisplay();
 }
@@ -72,13 +78,24 @@ void Matrix::OnEnd(void) {
 }
 
 void Matrix::DrawImage(const uint64_t &image, const int8_t &offset, const uint16_t &color) {
-  for (int8_t i = 0; i < WIDTH; i++) {
+  for (int8_t i = 0; i < HEIGHT; i++) {
     uint8_t row = (image >> i * WIDTH) & 0xFF;
-    // for (int8_t j = 0; j < HEIGHT; j++) {
-    //   if (bitRead(row, j) == 1) {
-    //     data.matrix->drawPixel(i, j, color);
-    //   }
-    // }
+
+    switch (data.direction) {
+      case Types::DIR_UP:
+      case Types::DIR_DOWN:
+        int shifted_i = (data.direction == Types::DIR_UP) ? i - offset : i + offset;
+        if ((shifted_i < 0) || (shifted_i >= HEIGHT)) {
+          continue;
+        }
+        break;
+      case Types::DIR_LEFT:
+        row = (row << offset) & 0xFF;
+        break;
+      case Types::DIR_RIGHT:
+        row = (row >> offset) & 0xFF;
+        break;
+    }
 
     data.matrix->displaybuffer[i] = row;
   }

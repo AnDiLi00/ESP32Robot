@@ -8,7 +8,7 @@
 Adafruit_SSD1306 display(Eyes::DISPLAY_WIDTH, Eyes::DISPLAY_HEIGHT, &Wire, Eyes::DISPLAY_RESET);
 
 // matrix setup
-Adafruit_8x8matrix matrix;
+Adafruit_LEDBackpack matrix;
 
 // remotexy gui configuration
 #pragma pack(push, 1)
