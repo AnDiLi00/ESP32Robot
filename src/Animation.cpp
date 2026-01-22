@@ -25,6 +25,7 @@ Animation::Animation(const Animation &copy) :
   data.duration_idle = copy.data.duration_idle;
 
   data.eyes = Eyes(copy.data.eyes);
+  data.matrix = Matrix(copy.data.matrix);
 
   data.test = copy.data.test;
   data.test_anim1 = copy.data.test_anim1;
@@ -47,6 +48,7 @@ Animation &Animation::operator=(const Animation &other) {
     data.duration_idle = other.data.duration_idle;
 
     data.eyes = Eyes(other.data.eyes);
+    data.matrix = Matrix(other.data.matrix);
 
     data.test = other.data.test;
     data.test_anim1 = other.data.test_anim1;
@@ -58,6 +60,10 @@ Animation &Animation::operator=(const Animation &other) {
 
 void Animation::SetDisplay(Adafruit_SSD1306 *display) {
   data.eyes.SetDisplay(display);
+}
+
+void Animation::SetMatrix(Adafruit_8x8matrix *matrix) {
+  data.matrix.SetMatrix(matrix);
 }
 
 void Animation::SetMood(const Types::Mood &mood) {
@@ -74,6 +80,7 @@ void Animation::SetSubMood(const Types::MoodSub &mood_sub) {
 
 void Animation::OnSetup(void) {
   data.eyes.OnSetup(data.mood, data.mood_sub);
+  data.matrix.OnSetup(data.mood, data.mood_sub);
 }
 
 void Animation::OnLoop(void) {
@@ -86,11 +93,13 @@ void Animation::OnLoop(void) {
     DoUpdate(now);
 
     data.eyes.OnLoop(data.mood, data.mood_sub);
+    data.matrix.OnLoop(data.mood, data.mood_sub);
   }
 }
 
 void Animation::OnEnd(void) {
   data.eyes.OnEnd();
+  data.matrix.OnEnd();
 }
 
 void Animation::DoUpdate(const unsigned long &now) {

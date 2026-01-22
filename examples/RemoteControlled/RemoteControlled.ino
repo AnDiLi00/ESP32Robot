@@ -61,11 +61,14 @@ void setup() {
   RemoteXY.mode = 1;
 
   Esp32Robot.SetDisplay(&display);
+  Esp32Robot.SetMatrix(&matrix);
+
   Esp32Robot.SetPin(Types::PART_LEFT_DRIVE, 5);
   Esp32Robot.SetPin(Types::PART_RIGHT_DRIVE, 23);
   Esp32Robot.SetPin(Types::PART_LEFT_ANKLE, 19);
   Esp32Robot.SetPin(Types::PART_RIGHT_ANKLE, 18);
   Esp32Robot.SetOffset(Types::PART_LEFT_ANKLE, Types::MOVE_WALK, 4);
+
   Esp32Robot.SetMode(Types::MOVE_WALK);
 
   Esp32Robot.OnSetup();

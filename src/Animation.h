@@ -2,6 +2,7 @@
 #define __animation_h__
 
 #include "Eyes.h"
+#include "Matrix.h"
 #include "Types.h"
 
 class Animation {
@@ -19,6 +20,8 @@ public:
   Animation &operator=(const Animation &other);
 
   virtual void SetDisplay(Adafruit_SSD1306 *display);
+  virtual void SetMatrix(Adafruit_8x8matrix *matrix);
+
   virtual void SetMood(const Types::Mood &mood);
   virtual void SetSubMood(const Types::MoodSub &mood_sub);
 
@@ -49,6 +52,7 @@ protected:
     unsigned long duration_idle;
 
     Eyes eyes;
+    Matrix matrix;
 
     bool test;
     int8_t test_anim1;
