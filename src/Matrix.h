@@ -13,7 +13,7 @@ public:
   static const int8_t HEIGHT;
   static const int8_t OFFSET_DEFAULT;
 
-  static const uint64_t IMG_DIGITS[] = {
+  static const uint64_t IMG_DIGITS[10] = {
     0x003f0c0c0c0c0e0c, // 1
     0x003f33061c30331e,
     0x001e33301c30331e,
@@ -26,7 +26,7 @@ public:
     0x003e676f7b73633e // 0
   };
 
-  static const uint64_t IMG_LETTERS_BIG[] = {
+  static const uint64_t IMG_LETTERS_BIG[26] = {
     0x0033333f33331e0c, // A
     0x003f66663e66663f,
     0x003c66030303663c,
@@ -55,7 +55,7 @@ public:
     0x007f664c1831637f // Z
   };
 
-  static const uint64_t IMG_LETTERS_SMALL[] = {
+  static const uint64_t IMG_LETTERS_SMALL[26] = {
     0x006e333e301e0000, // a
     0x003b66663e060607,
     0x001e3303331e0000,
@@ -84,7 +84,7 @@ public:
     0x003f260c193f0000 // z
   };
 
-  static const uint64_t IMG_SIGNS[] = {
+  static const uint64_t IMG_SIGNS[42] = {
     0x0000000000000000, // SPACE
     0x00000c0c3f0c0c00, // +
     0x000000003f000000, // -
@@ -126,8 +126,7 @@ public:
     0x00082a1c771c2a08, // 'sun'
     0x003c7e4200666600, // 'smile'
     0x00427e3c00666600, // 'frown'
-    0x007e7e0000664200, // 'angry'
-    0x003c427e00660000 // 'laugh'
+    0x007e7e0000664200 // 'angry'
   };
 
   Matrix(void);
