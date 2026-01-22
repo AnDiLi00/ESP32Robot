@@ -62,6 +62,8 @@ void Matrix::OnSetup(const Types::Mood &mood, const Types::MoodSub &submood) {
   data.matrix->setBrightness(BRIGHTNESS_DEFAULT);
   data.matrix->clear();
 
+  data.text = "Das ist ein Test! ] § ";
+
   data.matrix->writeDisplay();
 }
 
