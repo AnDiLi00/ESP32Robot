@@ -16,7 +16,7 @@ public:
   static const int8_t OFFSET_DEFAULT;
 
   struct Special {
-    char sign;
+    int sign;
     uint64_t image;
   };
 
@@ -102,7 +102,7 @@ public:
      { ',', 0x0080f07000000000 }, // ,
      { '!', 0x00000cbebe0c0000 }, // !
      { '?', 0x000406b2b21e0c00 }, // ?
-     { '§', 0x001c3e7cf87c3e1c }, // heart == '§'
+     { '/', 0x001c3e7cf87c3e1c }, // heart == '/'
      { '$', 0x0010387cfe7c3810 }, // diamond == '$'
      { '%', 0x00103894fe943810 }, // club == '%'
      { '&', 0x001038bcfebc3810 }, // spade == '&'
@@ -170,6 +170,7 @@ public:
 
   virtual void SetMatrix(Adafruit_LEDBackpack *matrix);
   virtual void SetDirection(const Types::Direction &direction);
+  virtual void SetText(const char *text);
 
   virtual void OnSetup(const Types::Mood &mood, const Types::MoodSub &submood);
   virtual void OnLoop(const Types::Mood &mood, const Types::MoodSub &submood);
@@ -186,7 +187,7 @@ protected:
     Types::Direction direction;
     int8_t offset;
 
-    char *text;
+    const char *text;
     char *current;
 
     Data(void) :

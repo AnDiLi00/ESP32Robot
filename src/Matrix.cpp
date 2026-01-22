@@ -53,6 +53,15 @@ void Matrix::SetDirection(const Types::Direction &direction) {
   }
 }
 
+void Matrix::SetText(const char *text) {
+  if (text != data.text) {
+    data.offset = 0;
+
+    data.text = text;
+    data.current = (char *)data.text;
+  }
+}
+
 void Matrix::OnSetup(const Types::Mood &mood, const Types::MoodSub &submood) {
   if (data.matrix == NULL) {
     return;
@@ -62,7 +71,8 @@ void Matrix::OnSetup(const Types::Mood &mood, const Types::MoodSub &submood) {
   data.matrix->setBrightness(BRIGHTNESS_DEFAULT);
   data.matrix->clear();
 
-  data.text = "Das ist ein Test! ] § ";
+  String newtext = "Das ist ein Test! ] / ";
+  SetText(newtext.c_str());
 
   data.matrix->writeDisplay();
 }
@@ -77,12 +87,14 @@ void Matrix::OnLoop(const Types::Mood &mood, const Types::MoodSub &submood) {
 
     DrawCharacter(data.current, data.offset);
 
+    /*
     char *next = data.current + 1;
-    if (next == '\0') {
-      next = text;
+    if (*next == '\0') {
+      next = (char *)data.text;
     }
 
     DrawCharacter(next, data.offset + SIZE);
+    */
 
     if (data.direction != Types::DIR_NO) {
       data.offset++;
@@ -90,8 +102,8 @@ void Matrix::OnLoop(const Types::Mood &mood, const Types::MoodSub &submood) {
         data.offset = 0;
 
         data.current++;
-        if (data.current == '\0') {
-          data.current = data.text;
+        if (*data.current == '\0') {
+          data.current = (char *)data.text;
         }
       }
     }
@@ -108,17 +120,17 @@ void Matrix::OnEnd(void) {
 void Matrix::DrawCharacter(const char *character, const int8_t &offset) {
   if ((character[0] >= '0') && (character[0] <= '1')) {
     uint8_t index = (uint8_t)character[0] - (uint8_t)'0';
-    DrawImage(IMG_DIGITS[index], const int8_t &offset);
+    DrawImage(IMG_DIGITS[index], offset);
   } else if ((character[0] >= 'A') && (character[0] <= 'Z')) {
     uint8_t index = (uint8_t)character[0] - (uint8_t)'A';
-    DrawImage(IMG_LETTERS_BIG[index], const int8_t &offset);
+    DrawImage(IMG_LETTERS_BIG[index], offset);
   } else if ((character[0] >= 'a') && (character[0] <= 'z')) {
     uint8_t index = (uint8_t)character[0] - (uint8_t)'a';
-    DrawImage(IMG_LETTERS_SMALL[index], const int8_t &offset);
+    DrawImage(IMG_LETTERS_SMALL[index], offset);
   } else {
     for (uint8_t i = 0; i < IMG_SIGNS_SIZE; i++) {
       if (character[0] == IMG_SIGNS[i].sign) {
-        DrawImage(IMG_SIGNS[i].image, const int8_t &offset);
+        DrawImage(IMG_SIGNS[i].image, offset);
         break;
       }
     }
