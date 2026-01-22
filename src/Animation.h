@@ -66,7 +66,7 @@ protected:
       last_idle(TIME_DEFAULT),
       duration_idle(TIME_DEFAULT),
       eyes(Eyes()),
-      test(false),
+      test(true),
       test_anim1(0),
       test_anim2(0) {
     }
