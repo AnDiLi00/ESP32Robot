@@ -9,21 +9,20 @@ class Matrix {
 public:
   static const uint8_t BRIGHTNESS_DEFAULT;
 
-  static const int8_t WIDTH;
-  static const int8_t HEIGHT;
+  static const int8_t SIZE;
   static const int8_t OFFSET_DEFAULT;
 
   static constexpr const uint64_t IMG_DIGITS[] = {
-    0x003f0c0c0c0c0e0c, // 1
-    0x003f33061c30331e,
-    0x001e33301c30331e,
-    0x0078307f33363c38,
-    0x001e3330301f033f,
-    0x001e33331f03061c,
-    0x000c0c0c1830333f,
-    0x001e33331e33331e,
-    0x000e18303e33331e, // 9
-    0x003e676f7b73633e // 0
+    0x008088fefe808000,
+    0x00c4e6a2929e8c00,
+    0x0044c69292fe6c00,
+    0x00302824fefe2000,
+    0x004ece8a8afa7200,
+    0x007cfe9292f66400,
+    0x000606e2fa1e0600,
+    0x006cfe9292fe6c00,
+    0x004cde9292fe7c00,
+    0x007cfe928afe7c00
   };
 
   static constexpr const uint64_t IMG_LETTERS_BIG[] = {
@@ -142,7 +141,7 @@ public:
   virtual void OnEnd(void);
 
 protected:
-  virtual void DrawImage(const uint64_t &image, const int8_t &offset, const uint16_t &color);
+  virtual void DrawImage(const uint64_t &image, const int8_t &offset);
 
   struct Data {
     Adafruit_LEDBackpack *matrix;
