@@ -1,6 +1,6 @@
 #include "Matrix.h"
 
-const uint8_t Matrix::BRIGHTNESS_DEFAULT = 8;
+const uint8_t Matrix::BRIGHTNESS_DEFAULT = 6;
 
 const int8_t Matrix::SIZE = 8;
 const int8_t Matrix::OFFSET_DEFAULT = 0;
