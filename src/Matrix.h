@@ -142,7 +142,7 @@ public:
   virtual void OnEnd(void);
 
 protected:
-  virtual void DrawImage(const uint64_t &image, int8_t &offset, const uint16_t &color);
+  virtual void DrawImage(const uint64_t &image, const int8_t &offset, const uint16_t &color);
 
   struct Data {
     Adafruit_8x8matrix *matrix;

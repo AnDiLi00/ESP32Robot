@@ -56,7 +56,7 @@ void Matrix::OnSetup(const Types::Mood &mood, const Types::MoodSub &submood) {
 }
 
 void Matrix::OnLoop(const Types::Mood &mood, const Types::MoodSub &submood) {
-  if (data.display == NULL) {
+  if (data.matrix == NULL) {
     return;
   }
 
