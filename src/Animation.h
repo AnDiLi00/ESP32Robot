@@ -31,11 +31,10 @@ public:
 
 protected:
   virtual void DoUpdate(const unsigned long &now);
+  virtual void DoAnimationTest(const unsigned long &now);
 
   virtual unsigned long GetIdleDuration(void) const;
   virtual unsigned long GetAnimationSteps(void) const;
-
-  virtual void DoAnimationTest(void);
 
   virtual void PrintMood(void) const;
   virtual void PrintSubMood(void) const;

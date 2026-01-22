@@ -112,7 +112,7 @@ void Eyes::DrawEyes(const Types::Mood &mood, const Types::MoodSub &submood) {
   }
 }
 
-void Eyes::PrintPosition(void) const;
+void Eyes::PrintPosition(void) const {
   switch (data.position) {
     case Types::POS_CENTER:
       Serial.println("position=center");

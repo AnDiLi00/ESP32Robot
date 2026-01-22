@@ -109,7 +109,7 @@ void Animation::DoUpdate(const unsigned long &now) {
     case Types::ANIM_IDLE:
       if (difference_idle >= data.duration_idle) {
         if (data.test == true) {
-          DoAnimationTest();
+          DoAnimationTest(now);
         } else {
         }
       }
@@ -143,37 +143,7 @@ void Animation::DoUpdate(const unsigned long &now) {
   }
 }
 
-unsigned long Animation::GetIdleDuration(void) const {
-  unsigned long random_idle = ((TIME_IDLE_MIN + (unsigned long)random(TIME_IDLE_VARIANCE)) / TIME_UPDATE) * TIME_UPDATE;
-
-  return (random_idle);
-}
-
-unsigned long Animation::GetAnimationSteps(void) const {
-  unsigned long steps = 0;
-
-  switch (data.animation) {
-    case Types::ANIM_IDLE:
-      steps = TIME_TRANSITION_MIN / TIME_UPDATE;
-      break;
-    case Types::ANIM_BLINK:
-      switch (data.animation_sub) {
-        case Types::SUB_NONE:
-          break;
-        case Types::SUB_CLOSING:
-        case Types::SUB_OPENING:
-          steps = TIME_BLINK_MIN / TIME_UPDATE;
-          break;
-      }
-      break;
-    case Types::ANIM_SHAKE:
-      break;
-  }
-
-  return (steps);
-}
-
-virtual void Animation::DoAnimationTest(void) {
+void Animation::DoAnimationTest(const unsigned long &now) {
   if (data.test_anim1 % 2 == 0) {
     // blink
     data.animation = Types::ANIM_BLINK;
@@ -205,7 +175,37 @@ virtual void Animation::DoAnimationTest(void) {
   data.test_anim1++;
 }
 
-virtual void Animation::PrintMood(void) const {
+unsigned long Animation::GetIdleDuration(void) const {
+  unsigned long random_idle = ((TIME_IDLE_MIN + (unsigned long)random(TIME_IDLE_VARIANCE)) / TIME_UPDATE) * TIME_UPDATE;
+
+  return (random_idle);
+}
+
+unsigned long Animation::GetAnimationSteps(void) const {
+  unsigned long steps = 0;
+
+  switch (data.animation) {
+    case Types::ANIM_IDLE:
+      steps = TIME_TRANSITION_MIN / TIME_UPDATE;
+      break;
+    case Types::ANIM_BLINK:
+      switch (data.animation_sub) {
+        case Types::SUB_NONE:
+          break;
+        case Types::SUB_CLOSING:
+        case Types::SUB_OPENING:
+          steps = TIME_BLINK_MIN / TIME_UPDATE;
+          break;
+      }
+      break;
+    case Types::ANIM_SHAKE:
+      break;
+  }
+
+  return (steps);
+}
+
+void Animation::PrintMood(void) const {
   switch (data.mood) {
     case Types::MOOD_NORMAL:
       Serial.println("mood=normal");
@@ -228,7 +228,7 @@ virtual void Animation::PrintMood(void) const {
   }
 }
 
-virtual void Animation::PrintSubMood(void) const {
+void Animation::PrintSubMood(void) const {
   switch (data.mood_sub) {
     case Types::MSUB_NORMAL:
       Serial.println("submood=normal");
