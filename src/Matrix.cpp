@@ -73,11 +73,13 @@ void Matrix::OnEnd(void) {
 
 void Matrix::DrawImage(const uint64_t &image, const int8_t &offset, const uint16_t &color) {
   for (int8_t i = 0; i < WIDTH; i++) {
-    byte row = (image >> i * WIDTH) & 0xFF;
-    for (int8_t j = 0; j < HEIGHT; j++) {
-      if (bitRead(row, j) == 1) {
-        data.matrix->drawPixel(i, j, color);
-      }
-    }
+    uint8_t row = (image >> i * WIDTH) & 0xFF;
+    // for (int8_t j = 0; j < HEIGHT; j++) {
+    //   if (bitRead(row, j) == 1) {
+    //     data.matrix->drawPixel(i, j, color);
+    //   }
+    // }
+
+    data.matrix->displaybuffer[i] = row;
   }
 }
