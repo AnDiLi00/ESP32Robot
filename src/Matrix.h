@@ -142,6 +142,8 @@ protected:
 
   virtual uint64_t GetImage(const char *character);
 
+  virtual void PrintDirection(void) const;
+
   struct Data {
     Adafruit_LEDBackpack *matrix;
     uint8_t brightness;
