@@ -14,6 +14,8 @@ public:
   static const unsigned long TIME_BLINK_MIN;
   static const unsigned long TIME_TRANSITION_MIN;
 
+  static const String TEST;
+
   Animation(void);
   Animation(const Animation &copy);
   virtual ~Animation(void);

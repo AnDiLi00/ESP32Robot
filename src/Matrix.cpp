@@ -10,7 +10,6 @@ const uint8_t Matrix::CYCLES_LOOP = 0;
 const int8_t Matrix::SIZE = 8;
 
 const String Matrix::DRAW_IMAGE = "*";
-const String Matrix::TEST = "Das ist ein Test /$%&+- ";
 
 Matrix::Matrix(void) :
   data() {
@@ -91,13 +90,13 @@ void Matrix::SetImage(const uint64_t &image, const Types::Direction &direction, 
 }
 
 void Matrix::SetText(const char *text, const Types::Direction &direction, const uint8_t &cycles) {
+  data.cycles_animation = cycles;
+  data.cycle_animation = 0;
+
+  data.direction = direction;
+  data.offset = 0;
+
   if (text != data.text) {
-    data.cycles_animation = cycles;
-    data.cycle_animation = 0;
-
-    data.direction = direction;
-    data.offset = 0;
-
     data.text = text;
     data.current = (char *)data.text;
 
@@ -202,6 +201,8 @@ void Matrix::DrawImage(const uint64_t &image, const uint64_t &image_next, const 
             row = (image_next >> shifted_i * SIZE) & 0xFF;
           }
         }
+        break;
+      case Types::DIRECTIONS:
         break;
     }
 

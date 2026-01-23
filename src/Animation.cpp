@@ -2,10 +2,12 @@
 
 const unsigned long Animation::TIME_DEFAULT = 0;
 const unsigned long Animation::TIME_UPDATE = 20;
-const unsigned long Animation::TIME_IDLE_MIN = 4200;
-const unsigned long Animation::TIME_IDLE_VARIANCE = 1600;
+const unsigned long Animation::TIME_IDLE_MIN = 7000;
+const unsigned long Animation::TIME_IDLE_VARIANCE = 3000;
 const unsigned long Animation::TIME_BLINK_MIN = 100;
 const unsigned long Animation::TIME_TRANSITION_MIN = 60;
+
+const String Animation::TEST = "Das ist ein Test /$%&+- ";
 
 Animation::Animation(void) :
   data() {
@@ -81,6 +83,10 @@ void Animation::SetSubMood(const Types::MoodSub &mood_sub) {
 void Animation::OnSetup(void) {
   data.eyes.OnSetup(data.mood, data.mood_sub);
   data.matrix.OnSetup(data.mood, data.mood_sub);
+
+  if (data.test == true) {
+    data.matrix.SetText(TEST.c_str());
+  }
 }
 
 void Animation::OnLoop(void) {
@@ -150,6 +156,10 @@ void Animation::DoAnimationTest(const unsigned long &now) {
     data.animation_sub = Types::SUB_CLOSING;
 
     data.eyes.OnMoodChange(Types::MOOD_CLOSED, data.mood_sub, GetAnimationSteps());
+
+    uint8_t new_direction = (uint8_t)random((uint8_t)Types::DIRECTIONS);
+    uint8_t new_cycles = (uint8_t)random((uint8_t)(Matrix::CYCLES_LOOP + 3));
+    data.matrix.SetText(TEST.c_str(), (Types::Direction)new_direction, new_cycles);
   } else {
     // switch through all moods and submoods
     data.last_idle = now;
@@ -171,7 +181,10 @@ void Animation::DoAnimationTest(const unsigned long &now) {
     } else {
       data.test_anim1++;
     }
+
+    data.matrix.Clear();
   }
+
   data.test_anim1++;
 }
 

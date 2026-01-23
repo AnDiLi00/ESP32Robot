@@ -69,7 +69,8 @@ public:
     DIR_UP,
     DIR_DOWN,
     DIR_LEFT,
-    DIR_RIGHT
+    DIR_RIGHT,
+    DIRECTIONS
   };
 
 private:

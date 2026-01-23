@@ -17,7 +17,6 @@ public:
   static const int8_t SIZE;
 
   static const String DRAW_IMAGE;
-  static const String TEST;
 
   struct Special {
     int sign;
