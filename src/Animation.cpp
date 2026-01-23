@@ -2,8 +2,8 @@
 
 const unsigned long Animation::TIME_DEFAULT = 0;
 const unsigned long Animation::TIME_UPDATE = 20;
-const unsigned long Animation::TIME_IDLE_MIN = 7000;
-const unsigned long Animation::TIME_IDLE_VARIANCE = 3000;
+const unsigned long Animation::TIME_IDLE_MIN = 5000;
+const unsigned long Animation::TIME_IDLE_VARIANCE = 2000;
 const unsigned long Animation::TIME_BLINK_MIN = 100;
 const unsigned long Animation::TIME_TRANSITION_MIN = 60;
 
@@ -157,7 +157,7 @@ void Animation::DoAnimationTest(const unsigned long &now) {
 
     data.eyes.OnMoodChange(Types::MOOD_CLOSED, data.mood_sub, GetAnimationSteps());
 
-    uint8_t new_direction = (uint8_t)random((uint8_t)Types::DIRECTIONS);
+    uint8_t new_direction = (uint8_t)random((uint8_t)(Types::DIRECTIONS - 1)) + 1;
     uint8_t new_cycles = (uint8_t)random((uint8_t)(Matrix::CYCLES_LOOP + 3));
     data.matrix.SetText(TEST.c_str(), (Types::Direction)new_direction, new_cycles);
   } else {

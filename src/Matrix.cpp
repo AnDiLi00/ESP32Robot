@@ -107,8 +107,10 @@ void Matrix::SetText(const char *text, const Types::Direction &direction, const 
 }
 
 void Matrix::Clear(void) {
+  data.cycles_animation = CYCLES_LOOP;
   data.cycle_animation = 0;
 
+  data.direction = Types::DIR_NO;
   data.offset = 0;
 
   data.text = NULL;
@@ -121,27 +123,29 @@ void Matrix::OnSetup(const Types::Mood &mood, const Types::MoodSub &submood) {
 }
 
 void Matrix::OnLoop(const Types::Mood &mood, const Types::MoodSub &submood) {
-  if (data.matrix == NULL) {
+  if (data.matrix == NULL) {    
     return;
   }
 
   if (data.cycle_update == 0) {
     data.matrix->clear();
 
-    DrawCharacter(data.current, data.offset);
+    if ((data.text != NULL) && (data.current != NULL)) {
+      DrawCharacter(data.current, data.offset);
 
-    if ((data.direction != Types::DIR_NO) &&
-        ((data.cycles_animation == CYCLES_LOOP) || (data.cycle_animation < (data.cycles_animation - 1)))) {
-      data.offset++;
-      if (data.offset == SIZE) {
-        data.offset = 0;
+      if ((data.direction != Types::DIR_NO) &&
+          ((data.cycles_animation == CYCLES_LOOP) || (data.cycle_animation < (data.cycles_animation - 1)))) {
+        data.offset++;
+        if (data.offset == SIZE) {
+          data.offset = 0;
 
-        data.current++;
-        if (*data.current == '\0') {
-          data.current = (char *)data.text;
+          data.current++;
+          if (*data.current == '\0') {
+            data.current = (char *)data.text;
 
-          if (data.cycles_animation != CYCLES_LOOP) {
-            data.cycle_animation++;
+            if (data.cycles_animation != CYCLES_LOOP) {
+              data.cycle_animation++;
+            }
           }
         }
       }
