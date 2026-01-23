@@ -8,16 +8,16 @@
 class Matrix {
 public:
   static const uint8_t BRIGHTNESS_DEFAULT;
+  static const uint8_t BRIGHTNESS_MIN;
+  static const uint8_t BRIGHTNESS_MAX;
 
-  static const uint8_t UPDATE_CYCLES;
-  static const uint8_t CYCLES_DEFAULT;
+  static const uint8_t CYCLES_UPDATE;
+  static const uint8_t CYCLES_LOOP;
 
   static const int8_t SIZE;
-  static const int8_t OFFSET_DEFAULT;
 
+  static const String DRAW_IMAGE;
   static const String TEST;
-  static const String TEST2;
-  static const String TEST3;
 
   struct Special {
     int sign;
@@ -127,8 +127,11 @@ public:
   Matrix &operator=(const Matrix &other);
 
   virtual void SetMatrix(Adafruit_LEDBackpack *matrix);
-  virtual void SetDirection(const Types::Direction &direction);
-  virtual void SetText(const char *text);
+  virtual void SetMatrixBrightness(const uint8_t &brightness);
+
+  virtual void SetImage(const uint64_t &image, const Types::Direction &direction = Types::DIR_LEFT, const uint8_t &cycles = CYCLES_LOOP);
+  virtual void SetText(const char *text, const Types::Direction &direction = Types::DIR_LEFT, const uint8_t &cycles = CYCLES_LOOP);
+  virtual void Clear(void);
 
   virtual void OnSetup(const Types::Mood &mood, const Types::MoodSub &submood);
   virtual void OnLoop(const Types::Mood &mood, const Types::MoodSub &submood);
@@ -142,7 +145,11 @@ protected:
 
   struct Data {
     Adafruit_LEDBackpack *matrix;
-    uint8_t cycle;
+    uint8_t brightness;
+
+    uint8_t cycles_animation;
+    uint8_t cycle_animation;
+    uint8_t cycle_update;
 
     Types::Direction direction;
     int8_t offset;
@@ -150,13 +157,19 @@ protected:
     const char *text;
     char *current;
 
+    uint64_t image;
+
     Data(void) :
       matrix(NULL),
-      cycle(CYCLES_DEFAULT),
-      direction(Types::DIR_LEFT),
-      offset(OFFSET_DEFAULT),
+      brightness(BRIGHTNESS_DEFAULT),
+      cycles_animation(CYCLES_LOOP),
+      cycle_animation(0),
+      cycle_update(0),
+      direction(Types::DIR_NO),
+      offset(0),
       text(NULL),
-      current(NULL) {
+      current(NULL),
+      image(0) {
     }
   };
 
