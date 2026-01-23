@@ -160,6 +160,11 @@ void Animation::DoAnimationTest(const unsigned long &now) {
     uint8_t new_direction = (uint8_t)random((uint8_t)Types::DIRECTIONS);
     uint8_t new_cycles = (uint8_t)random((uint8_t)(Matrix::CYCLES_LOOP + 3));
     data.matrix.SetText(TEST.c_str(), (Types::Direction)new_direction, new_cycles);
+
+    Serial.print("direction=");
+    Serial.print(new_direction);
+    Serial.print(", cycles=");
+    Serial.println(new_cycles);
   } else {
     // switch through all moods and submoods
     data.last_idle = now;

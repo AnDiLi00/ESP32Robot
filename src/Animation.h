@@ -40,6 +40,7 @@ protected:
 
   virtual void PrintMood(void) const;
   virtual void PrintSubMood(void) const;
+  virtual void PrintDirection(void) const;
 
   struct Data {
     Types::Mood mood;

@@ -104,6 +104,8 @@ void Matrix::SetText(const char *text, const Types::Direction &direction, const 
       data.image = 0;
     }
   }
+
+  PrintDirection();
 }
 
 void Matrix::Clear(void) {
@@ -229,4 +231,27 @@ uint64_t Matrix::GetImage(const char *character) {
   }
 
   return (image);
+}
+
+void Matrix::PrintDirection(void) const {
+  switch (data.direction) {
+    case Types::DIR_NO:
+      Serial.println("direction=no");
+      break;
+    case Types::DIR_UP:
+      Serial.println("direction=up");
+      break;
+    case Types::DIR_DOWN:
+      Serial.println("direction=down");
+      break;
+    case Types::DIR_LEFT:
+      Serial.println("direction=left");
+      break;
+    case Types::DIR_RIGHT:
+      Serial.println("direction=right");
+      break;
+    case Types::DIRECTIONS:
+      Serial.println("direction=directions?!");
+      break;
+  }
 }
