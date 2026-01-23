@@ -104,8 +104,6 @@ void Matrix::SetText(const char *text, const Types::Direction &direction, const 
       data.image = 0;
     }
   }
-
-  PrintDirection();
 }
 
 void Matrix::Clear(void) {
