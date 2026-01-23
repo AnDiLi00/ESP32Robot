@@ -118,11 +118,6 @@ void Matrix::Clear(void) {
 }
 
 void Matrix::OnSetup(const Types::Mood &mood, const Types::MoodSub &submood) {
-  if (data.matrix == NULL) {
-    return;
-  }
-
-  SetText(TEST.c_str());
 }
 
 void Matrix::OnLoop(const Types::Mood &mood, const Types::MoodSub &submood) {
