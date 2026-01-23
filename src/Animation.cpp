@@ -218,39 +218,55 @@ unsigned long Animation::GetAnimationSteps(void) const {
   return (steps);
 }
 
-void Animation::PrintMood(void) const {
+void Animation::PrintMood(const bool &crlf) const {
+  String text;
+
   switch (data.mood) {
     case Types::MOOD_NORMAL:
-      Serial.println("mood=normal");
+      text = "mood=normal";
       break;
     case Types::MOOD_CONFUSED:
-      Serial.println("mood=confused");
+      text = "mood=confused";
       break;
     case Types::MOOD_ANGRY:
-      Serial.println("mood=angry");
+      text = "mood=angry";
       break;
     case Types::MOOD_TIRED:
-      Serial.println("mood=tired");
+      text = "mood=tired";
       break;
     case Types::MOOD_CLOSED:
-      Serial.println("mood=closed");
+      text = "mood=closed";
       break;
     case Types::MOODS:
-      Serial.println("mood=moods?!");
+      text = "mood=moods?!";
       break;
+  }
+
+  if (crlf == true) {
+    Serial.println(text);
+  } else {
+    Serial.print(text);
   }
 }
 
-void Animation::PrintSubMood(void) const {
+void Animation::PrintSubMood(const bool &crlf) const {
+  String text;
+
   switch (data.mood_sub) {
     case Types::MSUB_NORMAL:
-      Serial.println("submood=normal");
+      text = "submood=normal";
       break;
     case Types::MSUB_HAPPY:
-      Serial.println("submood=happy");
+      text = "submood=happy";
       break;
     case Types::SUBMOODS:
-      Serial.println("submood=submoods?!");
+      text = "submood=submoods?!";
       break;
+  }
+
+  if (crlf == true) {
+    Serial.println(text);
+  } else {
+    Serial.print(text);
   }
 }

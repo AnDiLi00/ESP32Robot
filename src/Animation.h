@@ -38,8 +38,8 @@ protected:
   virtual unsigned long GetIdleDuration(void) const;
   virtual unsigned long GetAnimationSteps(void) const;
 
-  virtual void PrintMood(void) const;
-  virtual void PrintSubMood(void) const;
+  virtual void PrintMood(const bool &crlf) const;
+  virtual void PrintSubMood(const bool &crlf) const;
 
   struct Data {
     Types::Mood mood;

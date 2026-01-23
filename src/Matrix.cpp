@@ -91,7 +91,7 @@ void Matrix::SetImage(const uint64_t &image, const Types::Direction &direction, 
 
 void Matrix::SetText(const char *text, const Types::Direction &direction, const uint8_t &cycles) {
   data.cycles_animation = cycles;
-  data.cycle_animation = 0;
+  data.cycle_animation = cycles;
 
   data.direction = direction;
   data.offset = 0;
@@ -104,6 +104,13 @@ void Matrix::SetText(const char *text, const Types::Direction &direction, const 
       data.image = 0;
     }
   }
+
+  Serial.print("matrix set text='");
+  Serial.print(text);
+  Serial.print("', ");
+  PrintDirection(false);
+  Serial.print(", cycles=");
+  Serial.println(cycles);
 }
 
 void Matrix::Clear(void) {
@@ -117,6 +124,8 @@ void Matrix::Clear(void) {
   data.current = NULL;
 
   data.image = 0;
+
+  Serial.println("matrix clear");
 }
 
 void Matrix::OnSetup(const Types::Mood &mood, const Types::MoodSub &submood) {
@@ -134,7 +143,7 @@ void Matrix::OnLoop(const Types::Mood &mood, const Types::MoodSub &submood) {
       DrawCharacter(data.current, data.offset);
 
       if ((data.direction != Types::DIR_NO) &&
-          ((data.cycles_animation == CYCLES_LOOP) || (data.cycle_animation < (data.cycles_animation - 1)))) {
+          ((data.cycles_animation == CYCLES_LOOP) || (data.cycle_animation > 0))) {
         data.offset++;
         if (data.offset == SIZE) {
           data.offset = 0;
@@ -142,9 +151,10 @@ void Matrix::OnLoop(const Types::Mood &mood, const Types::MoodSub &submood) {
           data.current++;
           if (*data.current == '\0') {
             data.current = (char *)data.text;
+            data.cycle_animation--;
 
-            if (data.cycles_animation != CYCLES_LOOP) {
-              data.cycle_animation++;
+            if (data.cycle_animation == 0) {
+              data.current = NULL;
             }
           }
         }
@@ -162,12 +172,20 @@ void Matrix::OnEnd(void) {
 
 void Matrix::DrawCharacter(const char *character, const int8_t &offset) {
   uint64_t image = GetImage(character);
+  uint64_t image_next = 0;
 
-  char *next = (char *)character + 1;
-  if (*next == '\0') {
-    next = (char *)data.text;
+  if ((data.direction != Types::DIR_NO) &&
+      ((data.cycles_animation == CYCLES_LOOP) || (data.cycle_animation > 0))) {
+    char *next = (char *)character + 1;
+    if (*next == '\0') {
+      next = (char *)data.text;
+    }
+    if ((next == (char *)data.text) && (data.cycle_animation == 1)) {
+      // dont set image next for last character in last cycle
+    } else {
+      image_next = GetImage(next);
+    }
   }
-  uint64_t image_next = GetImage(next);
 
   DrawImage(image, image_next, offset);
 }
@@ -212,22 +230,24 @@ void Matrix::DrawImage(const uint64_t &image, const uint64_t &image_next, const 
 uint64_t Matrix::GetImage(const char *character) {
   uint64_t image = 0;
 
-  if ((character[0] >= '0') && (character[0] <= '1')) {
-    uint8_t index = (uint8_t)character[0] - (uint8_t)'0';
-    image = IMG_DIGITS[index];
-  } else if ((character[0] >= 'A') && (character[0] <= 'Z')) {
-    uint8_t index = (uint8_t)character[0] - (uint8_t)'A';
-    image = IMG_LETTERS_BIG[index];
-  } else if ((character[0] >= 'a') && (character[0] <= 'z')) {
-    uint8_t index = (uint8_t)character[0] - (uint8_t)'a';
-    image = IMG_LETTERS_SMALL[index];
-  } else if (character[0] == DRAW_IMAGE[0]) {
-    image = data.image;
-  } else {
-    for (uint8_t i = 0; i < IMG_SIGNS_SIZE; i++) {
-      if (character[0] == IMG_SIGNS[i].sign) {
-        image = IMG_SIGNS[i].image;
-        break;
+  if (character != NULL) {
+    if ((character[0] >= '0') && (character[0] <= '1')) {
+      uint8_t index = (uint8_t)character[0] - (uint8_t)'0';
+      image = IMG_DIGITS[index];
+    } else if ((character[0] >= 'A') && (character[0] <= 'Z')) {
+      uint8_t index = (uint8_t)character[0] - (uint8_t)'A';
+      image = IMG_LETTERS_BIG[index];
+    } else if ((character[0] >= 'a') && (character[0] <= 'z')) {
+      uint8_t index = (uint8_t)character[0] - (uint8_t)'a';
+      image = IMG_LETTERS_SMALL[index];
+    } else if (character[0] == DRAW_IMAGE[0]) {
+      image = data.image;
+    } else {
+      for (uint8_t i = 0; i < IMG_SIGNS_SIZE; i++) {
+        if (character[0] == IMG_SIGNS[i].sign) {
+          image = IMG_SIGNS[i].image;
+          break;
+        }
       }
     }
   }
@@ -235,25 +255,33 @@ uint64_t Matrix::GetImage(const char *character) {
   return (image);
 }
 
-void Matrix::PrintDirection(void) const {
+void Matrix::PrintDirection(const bool &crlf) const {
+  String text;
+
   switch (data.direction) {
     case Types::DIR_NO:
-      Serial.println("direction=no");
+      text = "direction=no";
       break;
     case Types::DIR_UP:
-      Serial.println("direction=up");
+      text = "direction=up";
       break;
     case Types::DIR_DOWN:
-      Serial.println("direction=down");
+      text = "direction=down";
       break;
     case Types::DIR_LEFT:
-      Serial.println("direction=left");
+      text = "direction=left";
       break;
     case Types::DIR_RIGHT:
-      Serial.println("direction=right");
+      text = "direction=right";
       break;
     case Types::DIRECTIONS:
-      Serial.println("direction=directions?!");
+      text = "direction=directions?!";
       break;
+  }
+
+  if (crlf == true) {
+    Serial.println(text);
+  } else {
+    Serial.print(text);
   }
 }

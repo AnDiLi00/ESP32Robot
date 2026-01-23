@@ -142,15 +142,15 @@ protected:
 
   virtual uint64_t GetImage(const char *character);
 
-  virtual void PrintDirection(void) const;
+  virtual void PrintDirection(const bool &crlf) const;
 
   struct Data {
     Adafruit_LEDBackpack *matrix;
     uint8_t brightness;
 
-    uint8_t cycles_animation;
-    uint8_t cycle_animation;
-    uint8_t cycle_update;
+    int8_t cycles_animation;
+    int8_t cycle_animation;
+    int8_t cycle_update;
 
     Types::Direction direction;
     int8_t offset;
