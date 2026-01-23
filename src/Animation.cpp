@@ -7,7 +7,7 @@ const unsigned long Animation::TIME_IDLE_VARIANCE = 3000;
 const unsigned long Animation::TIME_BLINK_MIN = 100;
 const unsigned long Animation::TIME_TRANSITION_MIN = 60;
 
-const String Animation::TEST = "Das ist ein Test /$%&+- ";
+const String Animation::TEST = "Test / ";
 
 Animation::Animation(void) :
   data() {
