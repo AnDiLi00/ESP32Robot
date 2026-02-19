@@ -15,6 +15,17 @@ public:
   virtual void OnSetup(void);
   virtual void OnLoop(void);
   virtual void OnEnd(void);
+
+protected:
+  struct Data {
+    unsigned long last_update;
+
+    Data(void) :
+      last_update(Types::TIME_DEFAULT) {
+    }
+  };
+
+  Data data;
 };
 
 #endif

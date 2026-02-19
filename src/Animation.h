@@ -7,8 +7,6 @@
 
 class Animation {
 public:
-  static const unsigned long TIME_DEFAULT;
-  static const unsigned long TIME_UPDATE;
   static const unsigned long TIME_IDLE_MIN;
   static const unsigned long TIME_IDLE_VARIANCE;
   static const unsigned long TIME_BLINK_MIN;
@@ -28,7 +26,7 @@ public:
   virtual void SetSubMood(const Types::MoodSub &mood_sub);
 
   virtual void OnSetup(void);
-  virtual void OnLoop(void);
+  virtual void OnLoop(const unsigned long &now);
   virtual void OnEnd(void);
 
 protected:
@@ -48,7 +46,6 @@ protected:
     Types::AnimType animation;
     Types::AnimSubType animation_sub;
 
-    unsigned long last_update;
     unsigned long last_idle;
     unsigned long duration_idle;
 
@@ -64,9 +61,8 @@ protected:
       mood_sub(Types::MSUB_NORMAL),
       animation(Types::ANIM_IDLE),
       animation_sub(Types::SUB_NONE),
-      last_update(TIME_DEFAULT),
-      last_idle(TIME_DEFAULT),
-      duration_idle(TIME_DEFAULT),
+      last_idle(Types::TIME_DEFAULT),
+      duration_idle(Types::TIME_DEFAULT),
       eyes(Eyes()),
       test(true),
       test_anim1(0),

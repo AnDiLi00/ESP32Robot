@@ -3,6 +3,9 @@
 
 class Types {
 public:
+  static const unsigned long TIME_DEFAULT = 0;
+  static const unsigned long TIME_UPDATE = 20;
+
   enum EyeType {
     EYE_LEFT,
     EYE_RIGHT,
@@ -52,6 +55,16 @@ public:
   enum MovementMode {
     MOVE_DRIVE,
     MOVE_WALK
+  };
+
+  enum MovementSubMode {
+    MSUB_DRIVE,
+    MSUB_LEFT_LEAN,
+    MSUB_LEFT_ROTATE,
+    MSUB_LEFT_LEANBACK,
+    MSUB_RIGHT_LEAN,
+    MSUB_RIGHT_ROTATE,
+    MSUB_RIGHT_LEANBACK
   };
 
   enum BodyParts {

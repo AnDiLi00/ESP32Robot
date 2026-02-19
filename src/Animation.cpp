@@ -1,7 +1,5 @@
 #include "Animation.h"
 
-const unsigned long Animation::TIME_DEFAULT = 0;
-const unsigned long Animation::TIME_UPDATE = 20;
 const unsigned long Animation::TIME_IDLE_MIN = 5000;
 const unsigned long Animation::TIME_IDLE_VARIANCE = 2000;
 const unsigned long Animation::TIME_BLINK_MIN = 100;
@@ -22,7 +20,6 @@ Animation::Animation(const Animation &copy) :
   data.animation = copy.data.animation;
   data.animation_sub = copy.data.animation_sub;
 
-  data.last_update = copy.data.last_update;
   data.last_idle = copy.data.last_idle;
   data.duration_idle = copy.data.duration_idle;
 
@@ -45,7 +42,6 @@ Animation &Animation::operator=(const Animation &other) {
     data.animation = other.data.animation;
     data.animation_sub = other.data.animation_sub;
 
-    data.last_update = other.data.last_update;
     data.last_idle = other.data.last_idle;
     data.duration_idle = other.data.duration_idle;
 
@@ -89,18 +85,11 @@ void Animation::OnSetup(void) {
   }
 }
 
-void Animation::OnLoop(void) {
-  unsigned long now = millis();
-  unsigned long difference_update = now - data.last_update;
+void Animation::OnLoop(const unsigned long &now) {
+  DoUpdate(now);
 
-  if (difference_update >= TIME_UPDATE) {
-    data.last_update = now;
-
-    DoUpdate(now);
-
-    data.eyes.OnLoop(data.mood, data.mood_sub);
-    data.matrix.OnLoop(data.mood, data.mood_sub);
-  }
+  data.eyes.OnLoop(data.mood, data.mood_sub);
+  data.matrix.OnLoop(data.mood, data.mood_sub);
 }
 
 void Animation::OnEnd(void) {
@@ -189,7 +178,7 @@ void Animation::DoAnimationTest(const unsigned long &now) {
 }
 
 unsigned long Animation::GetIdleDuration(void) const {
-  unsigned long random_idle = ((TIME_IDLE_MIN + (unsigned long)random(TIME_IDLE_VARIANCE)) / TIME_UPDATE) * TIME_UPDATE;
+  unsigned long random_idle = ((TIME_IDLE_MIN + (unsigned long)random(TIME_IDLE_VARIANCE)) / Types::TIME_UPDATE) * Types::TIME_UPDATE;
 
   return (random_idle);
 }
@@ -199,7 +188,7 @@ unsigned long Animation::GetAnimationSteps(void) const {
 
   switch (data.animation) {
     case Types::ANIM_IDLE:
-      steps = TIME_TRANSITION_MIN / TIME_UPDATE;
+      steps = TIME_TRANSITION_MIN / Types::TIME_UPDATE;
       break;
     case Types::ANIM_BLINK:
       switch (data.animation_sub) {
@@ -207,7 +196,7 @@ unsigned long Animation::GetAnimationSteps(void) const {
           break;
         case Types::SUB_CLOSING:
         case Types::SUB_OPENING:
-          steps = TIME_BLINK_MIN / TIME_UPDATE;
+          steps = TIME_BLINK_MIN / Types::TIME_UPDATE;
           break;
       }
       break;

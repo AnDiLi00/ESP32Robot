@@ -9,17 +9,25 @@ class Movement {
 public:
   static const int8_t PIN_NOPIN;
   static const int8_t OFFSET_DEFAULT;
-  static const int8_t POSITION_DEFAULT;
+  static const uint8_t POSITION_DEFAULT;
 
-  static const int8_t DRIVE_DRIVE_DEFAULT;
-  static const int8_t DRIVE_ANKLE_LEFT_DEFAULT;
-  static const int8_t DRIVE_ANKLE_RIGHT_DEFAULT;
-  static const int8_t DRIVE_ARM_DEFAULT;
+  static const uint8_t SERVO_CENTER;
+  static const uint8_t SERVO_RANGE_SPEED;
+  static const uint8_t SERVO_RANGE_STEERING;
 
-  static const int8_t WALK_DRIVE_DEFAULT;
-  static const int8_t WALK_ANKLE_LEFT_DEFAULT;
-  static const int8_t WALK_ANKLE_RIGHT_DEFAULT;
-  static const int8_t WALK_ARM_DEFAULT;
+  static const uint8_t DRIVE_DRIVE_DEFAULT;
+  static const uint8_t DRIVE_ANKLE_LEFT_DEFAULT;
+  static const uint8_t DRIVE_ANKLE_RIGHT_DEFAULT;
+  static const uint8_t DRIVE_ARM_DEFAULT;
+
+  static const uint8_t WALK_DRIVE_DEFAULT;
+  static const uint8_t WALK_ANKLE_LEFT_DEFAULT;
+  static const uint8_t WALK_ANKLE_RIGHT_DEFAULT;
+  static const uint8_t WALK_ANKLE_LEFT_WALK;
+  static const uint8_t WALK_ANKLE_RIGHT_WALK;
+  static const uint8_t WALK_ARM_DEFAULT;
+
+  static const unsigned long TIME_MOVE;
 
   Movement(void);
   Movement(const Movement &copy);
@@ -31,7 +39,7 @@ public:
   virtual void SetMode(const Types::MovementMode &mode);
 
   virtual void OnSetup(void);
-  virtual void OnLoop(void);
+  virtual void OnLoop(const unsigned long &now);
   virtual void OnEnd(void);
 
   virtual void OnModeChange(const uint8_t &mode);
@@ -41,8 +49,11 @@ public:
   virtual void OnOffsetRightChange(const int8_t &right_offset);
 
 protected:
+  virtual void UpdateDriving(const unsigned long &now);
+  virtual void UpdateWalking(const unsigned long &now);
+
   virtual void Update(const Types::BodyParts &part);
-  virtual void Move(const Types::BodyParts &part, const int8_t &position);
+  virtual void Move(const Types::BodyParts &part, const uint8_t &position);
 
   virtual int8_t GetOffset(const Types::BodyParts &part, const Types::MovementMode &mode) const;
 
@@ -52,13 +63,23 @@ protected:
     int8_t pins[Types::PART_PARTS];
     int8_t offsets_drive[Types::PART_PARTS];
     int8_t offsets_walk[Types::PART_PARTS];
-    int8_t positions[Types::PART_PARTS];
+    uint8_t positions[Types::PART_PARTS];
     Servo servos[Types::PART_PARTS];
 
     Types::MovementMode mode;
+    Types::MovementSubMode mode_sub;
+
+    unsigned long last_move;
+
+    int8_t steering;
+    int8_t speed;
 
     Data(void) :
-      mode(Types::MOVE_DRIVE) {
+      mode(Types::MOVE_DRIVE),
+      mode_sub(Types::MSUB_DRIVE),
+      last_move(Types::TIME_DEFAULT),
+      steering(0),
+      speed(0) {
 
       for (uint8_t i = 0; i < Types::PART_PARTS; i++) {
         pins[i] = PIN_NOPIN;
