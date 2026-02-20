@@ -32,7 +32,6 @@ Movement::Movement(void) :
 
 Movement::Movement(const Movement &copy) :
   data() {
-
   for (uint8_t i = 0; i < Types::PART_PARTS; i++) {
     data.pins[i] = copy.data.pins[i];
     data.offsets_drive[i] = copy.data.offsets_drive[i];
@@ -179,7 +178,7 @@ void Movement::OnOffsetRightChange(const int8_t &right_offset) {
 void Movement::UpdateDriving(const unsigned long &now) {
   int16_t speed_part = (SERVO_RANGE_SPEED_DRIVE * data.speed) / 100;
   speed_part = (speed_part / SERVO_RANGE_STEPS) * SERVO_RANGE_STEPS;
-  
+
   int16_t steering_part = (SERVO_RANGE_STEERING * data.steering) / 100;
   steering_part = (steering_part / SERVO_RANGE_STEPS) * SERVO_RANGE_STEPS;
 

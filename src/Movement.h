@@ -84,7 +84,6 @@ protected:
       last_move(Types::TIME_DEFAULT),
       steering(0),
       speed(0) {
-
       for (uint8_t i = 0; i < Types::PART_PARTS; i++) {
         pins[i] = PIN_NOPIN;
         offsets_drive[i] = OFFSET_DEFAULT;

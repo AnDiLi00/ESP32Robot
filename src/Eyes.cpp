@@ -10,7 +10,6 @@ Eyes::Eyes(void) :
 
 Eyes::Eyes(const Eyes &copy) :
   data() {
-
   data.display = copy.data.display;
   data.position = copy.data.position;
 

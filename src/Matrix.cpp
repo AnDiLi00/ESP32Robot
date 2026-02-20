@@ -17,7 +17,6 @@ Matrix::Matrix(void) :
 
 Matrix::Matrix(const Matrix &copy) :
   data() {
-
   data.matrix = copy.data.matrix;
   data.brightness = copy.data.brightness;
 
@@ -132,7 +131,7 @@ void Matrix::OnSetup(const Types::Mood &mood, const Types::MoodSub &submood) {
 }
 
 void Matrix::OnLoop(const Types::Mood &mood, const Types::MoodSub &submood) {
-  if (data.matrix == NULL) {    
+  if (data.matrix == NULL) {
     return;
   }
 

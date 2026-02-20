@@ -63,7 +63,7 @@ bool Eye::operator==(const Eye &comp) {
 }
 
 bool Eye::operator!=(const Eye &comp) {
-   return (!operator==(comp));
+  return (!operator==(comp));
 }
 
 

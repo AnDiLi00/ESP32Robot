@@ -10,7 +10,6 @@ Esp32Robot::Esp32Robot(const Esp32Robot &copy) :
   Animation(copy),
   Movement(copy),
   data() {
-
   data.last_update = copy.data.last_update;
 }
 

@@ -13,7 +13,6 @@ Animation::Animation(void) :
 
 Animation::Animation(const Animation &copy) :
   data() {
-
   data.mood = copy.data.mood;
   data.mood_sub = copy.data.mood_sub;
 
