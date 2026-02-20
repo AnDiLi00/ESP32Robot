@@ -12,7 +12,9 @@ public:
   static const uint8_t POSITION_DEFAULT;
 
   static const uint8_t SERVO_CENTER;
-  static const uint8_t SERVO_RANGE_SPEED;
+  static const uint8_t SERVO_RANGE_STEPS;
+  static const uint8_t SERVO_RANGE_SPEED_DRIVE;
+  static const uint8_t SERVO_RANGE_SPEED_WALK;
   static const uint8_t SERVO_RANGE_STEERING;
 
   static const uint8_t DRIVE_DRIVE_DEFAULT;
@@ -24,7 +26,9 @@ public:
   static const uint8_t WALK_ANKLE_LEFT_DEFAULT;
   static const uint8_t WALK_ANKLE_RIGHT_DEFAULT;
   static const uint8_t WALK_ANKLE_LEFT_WALK;
+  static const uint8_t WALK_ANKLE_LEFT_WALKRIGHT;
   static const uint8_t WALK_ANKLE_RIGHT_WALK;
+  static const uint8_t WALK_ANKLE_RIGHT_WALKLEFT;
   static const uint8_t WALK_ARM_DEFAULT;
 
   static const unsigned long TIME_MOVE;

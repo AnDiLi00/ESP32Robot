@@ -105,12 +105,12 @@ void Matrix::SetText(const char *text, const Types::Direction &direction, const 
     }
   }
 
-  Serial.print("matrix set text='");
-  Serial.print(text);
-  Serial.print("', ");
-  PrintDirection(false);
-  Serial.print(", cycles=");
-  Serial.println(cycles);
+  //Serial.print("matrix set text='");
+  //Serial.print(text);
+  //Serial.print("', ");
+  //PrintDirection(false);
+  //Serial.print(", cycles=");
+  //Serial.println(cycles);
 }
 
 void Matrix::Clear(void) {
@@ -125,7 +125,7 @@ void Matrix::Clear(void) {
 
   data.image = 0;
 
-  Serial.println("matrix clear");
+  //Serial.println("matrix clear");
 }
 
 void Matrix::OnSetup(const Types::Mood &mood, const Types::MoodSub &submood) {
