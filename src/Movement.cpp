@@ -8,7 +8,8 @@ const uint8_t Movement::SERVO_CENTER = 90;
 const uint8_t Movement::SERVO_RANGE_STEPS = 5;
 const uint8_t Movement::SERVO_RANGE_SPEED_DRIVE = 50;
 const uint8_t Movement::SERVO_RANGE_SPEED_WALK = 20;
-const uint8_t Movement::SERVO_RANGE_STEERING = 30;
+const uint8_t Movement::SERVO_RANGE_STEERING_DRIVE = 30;
+const uint8_t Movement::SERVO_RANGE_STEERING_WALK = 20;
 
 const uint8_t Movement::DRIVE_DRIVE_DEFAULT = Movement::SERVO_CENTER;
 const uint8_t Movement::DRIVE_ANKLE_LEFT_DEFAULT = 45;
@@ -25,6 +26,7 @@ const uint8_t Movement::WALK_ANKLE_RIGHT_WALKLEFT = 0;
 const uint8_t Movement::WALK_ARM_DEFAULT = Movement::SERVO_CENTER;
 
 const unsigned long Movement::TIME_MOVE = 360;
+const unsigned long Movement::TIME_ROTATE = 100;
 
 Movement::Movement(void) :
   data() {
@@ -179,7 +181,7 @@ void Movement::UpdateDriving(const unsigned long &now) {
   int16_t speed_part = (SERVO_RANGE_SPEED_DRIVE * data.speed) / 100;
   speed_part = (speed_part / SERVO_RANGE_STEPS) * SERVO_RANGE_STEPS;
 
-  int16_t steering_part = (SERVO_RANGE_STEERING * data.steering) / 100;
+  int16_t steering_part = (SERVO_RANGE_STEERING_DRIVE * data.steering) / 100;
   steering_part = (steering_part / SERVO_RANGE_STEPS) * SERVO_RANGE_STEPS;
 
   int16_t position_right = SERVO_CENTER - (speed_part - steering_part);
@@ -216,8 +218,23 @@ void Movement::UpdateWalking(const unsigned long &now) {
     case Types::MSUB_LEFT_LEAN:
       if (difference_update >= TIME_MOVE) {
         if (data.speed != 0) {
-          // TODO rotate left
+          int16_t speed_part = (SERVO_RANGE_SPEED_WALK * data.speed) / 100;
+          speed_part = (speed_part / SERVO_RANGE_STEPS) * SERVO_RANGE_STEPS;
+
+          int16_t steering_part = (SERVO_RANGE_STEERING_WALK * data.steering) / 100;
+          steering_part = (steering_part / SERVO_RANGE_STEPS) * SERVO_RANGE_STEPS;
+
+          int16_t position_left = SERVO_CENTER + (speed_part - steering_part);
+
+          if (position_left < 0) {
+            position_left = 0;
+          } else if (position_left > (2 * SERVO_CENTER)) {
+            position_left = 2 * SERVO_CENTER;
+          }
+
+          // rotate left
           data.mode_sub = Types::MSUB_LEFT_ROTATE;
+          Move(Types::PART_LEFT_DRIVE, (uint8_t)position_left);
         } else {
           data.mode_sub = Types::MSUB_LEFT_LEANBACK;
           Move(Types::PART_LEFT_ANKLE, WALK_ANKLE_LEFT_DEFAULT);
@@ -227,10 +244,11 @@ void Movement::UpdateWalking(const unsigned long &now) {
       }
       break;
     case Types::MSUB_LEFT_ROTATE:
-      if (difference_update >= TIME_MOVE) {
+      if (difference_update >= TIME_ROTATE) {
         data.mode_sub = Types::MSUB_LEFT_LEANBACK;
         Move(Types::PART_LEFT_ANKLE, WALK_ANKLE_LEFT_DEFAULT);
         Move(Types::PART_RIGHT_ANKLE, WALK_ANKLE_RIGHT_DEFAULT);
+        Move(Types::PART_LEFT_DRIVE, WALK_DRIVE_DEFAULT);
         data.last_move = now;
       }
       break;
@@ -249,8 +267,22 @@ void Movement::UpdateWalking(const unsigned long &now) {
     case Types::MSUB_RIGHT_LEAN:
       if (difference_update >= TIME_MOVE) {
         if (data.speed != 0) {
-          // TODO rotate right
+          int16_t speed_part = (SERVO_RANGE_SPEED_WALK * data.speed) / 100;
+          speed_part = (speed_part / SERVO_RANGE_STEPS) * SERVO_RANGE_STEPS;
+
+          int16_t steering_part = (SERVO_RANGE_STEERING_WALK * data.steering) / 100;
+          steering_part = (steering_part / SERVO_RANGE_STEPS) * SERVO_RANGE_STEPS;
+
+          int16_t position_right = SERVO_CENTER - (speed_part + steering_part);
+
+          if (position_right < 0) {
+            position_right = 0;
+          } else if (position_right > (2 * SERVO_CENTER)) {
+            position_right = 2 * SERVO_CENTER;
+          }
+          // rotate right
           data.mode_sub = Types::MSUB_RIGHT_ROTATE;
+          Move(Types::PART_RIGHT_DRIVE, (uint8_t)position_right);
         } else {
           data.mode_sub = Types::MSUB_RIGHT_LEANBACK;
           Move(Types::PART_LEFT_ANKLE, WALK_ANKLE_LEFT_DEFAULT);
@@ -260,10 +292,11 @@ void Movement::UpdateWalking(const unsigned long &now) {
       }
       break;
     case Types::MSUB_RIGHT_ROTATE:
-      if (difference_update >= TIME_MOVE) {
+      if (difference_update >= TIME_ROTATE) {
         data.mode_sub = Types::MSUB_RIGHT_LEANBACK;
         Move(Types::PART_LEFT_ANKLE, WALK_ANKLE_LEFT_DEFAULT);
         Move(Types::PART_RIGHT_ANKLE, WALK_ANKLE_RIGHT_DEFAULT);
+        Move(Types::PART_RIGHT_DRIVE, WALK_DRIVE_DEFAULT);
         data.last_move = now;
       }
       break;
