@@ -14,9 +14,8 @@ public:
   static const uint8_t SERVO_CENTER;
   static const uint8_t SERVO_RANGE_STEPS;
   static const uint8_t SERVO_RANGE_SPEED_DRIVE;
-  static const uint8_t SERVO_RANGE_SPEED_WALK;
   static const uint8_t SERVO_RANGE_STEERING_DRIVE;
-  static const uint8_t SERVO_RANGE_STEERING_WALK;
+  static const uint8_t SERVO_RANGE_WALK;
 
   static const uint8_t DRIVE_DRIVE_DEFAULT;
   static const uint8_t DRIVE_ANKLE_LEFT_DEFAULT;
@@ -33,6 +32,7 @@ public:
   static const uint8_t WALK_ARM_DEFAULT;
 
   static const unsigned long TIME_MOVE;
+  static const unsigned long TIME_ROTATE;
 
   Movement(void);
   Movement(const Movement &copy);
